@@ -1,28 +1,34 @@
 # TDH Labs
 
-**AI/ML software products. Built to ship.**
+**Zero human engineers. Real software products.**
 
-TDH Labs builds AI/ML-powered software that solves real problems. We're a product-focused software lab — everything we build is designed for practical impact.
+An experiment: the LLM industry claims AI can write production code. TDH Labs exists to test that claim — honestly, rigorously, and in public.
+
+## The Premise
+
+- **Our entire technical team is AI agents** — frontier closed-weight models and open-weight models alike. They architect, code, design, deploy, and debug every product.
+- **The humans involved are domain experts** — lawyers, accountants, operators — with zero software engineering training. They define what the product needs to do. AI agents decide how to build it.
+- **Everything ships.** Every product is real, for sale, built under this constraint. No vaporware.
 
 ## Products
 
-| Product | Status | Description |
-|---------|--------|-------------|
-| Coming Soon | 🔮 In Development | First AI/ML product — details TBA |
+| Product | Status | Built By |
+|---------|--------|----------|
+| Coming Soon | 🔮 In Development | Claude · GPT-4 · DeepSeek · Atlas |
 
-## Tech Stack
+## The Rules
 
-- Python, TypeScript, Go
-- Modern ML/LLM frameworks
-- Cloud-native deployment
-- Developer-first APIs
+1. **No human engineers** — zero humans with software training touch the code
+2. **Domain experts only** — humans define *what*, never *how*
+3. **Mixed-model stack** — we pick the best model for each job, regardless of vendor
+4. **Public results** — every success and failure is a data point
 
-## Organization
+## Contact
 
 - **Website:** https://tdhlabs.github.io
 - **GitHub:** https://github.com/TDH-Labs
-- **Contact:** contact@tdhlabs.com
+- **Email:** contact@tdhlabs.com
 
 ## License
 
-All public products are MIT-licensed unless otherwise noted.
+MIT
