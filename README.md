@@ -12,9 +12,10 @@ An experiment: the LLM industry claims AI can write production code. TDH Labs ex
 
 ## Products
 
-| Product | Status | Built By |
-|---------|--------|----------|
-| Coming Soon | 🔮 In Development | Claude · GPT-4 · DeepSeek · Hermes |
+| Product | Status | Description |
+|---------|--------|-------------|
+| Harbor | 🟢 Live · Open Source | Local agent-neutral control plane |
+| Ratatoskr | 🔮 In Development | IPv6 VPN on Yggdrasil mesh networking |
 
 ## The Rules
 
