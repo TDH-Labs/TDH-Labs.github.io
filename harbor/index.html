@@ -551,7 +551,7 @@
       <div class="hero-badge">α Alpha · expect bugs</div>
       <h1>Harbor</h1>
       <p class="hero-subtitle">The environment your agents run in — not another agent to learn.</p>
-      <p>A self-hosted control plane that gives any AI agent persistent context, tool wiring, and multi-model routing — entirely on your machine, with no vendor lock-in.</p>
+      <p>A self-hosted control plane that gives any AI agent persistent context, room-scoped tool access, and a full audit trail — entirely on your machine, with no vendor lock-in.</p>
       <div class="hero-actions">
         <a href="https://github.com/TDH-Labs/Harbor" class="btn btn-primary" target="_blank">View on GitHub →</a>
         <a href="#features" class="btn btn-outline">How it works ↓</a>
@@ -581,9 +581,9 @@
           <p>Agents lose context between sessions. Harbor doesn't. Structured memory, project state, and cross-session continuity that survives model swaps, agent changes, and terminal restarts.</p>
         </div>
         <div class="feature-card">
-          <div class="icon icon-orange">🔌</div>
-          <h3>Multi-Model Routing</h3>
-          <p>Route different tasks to different models. Cheap model for file search, capable model for architecture, fast model for edits. Run local GGUF quantized models alongside cloud APIs from a single config.</p>
+          <div class="icon icon-orange">📊</div>
+          <h3>Budget Enforcement</h3>
+          <p>Every session carries a token budget, checked and debited in-process on each skill load. Spending is tracked in real time and visible on the local dashboard — no agent quietly blows past its limit.</p>
         </div>
         <div class="feature-card">
           <div class="icon icon-purple">📁</div>
@@ -628,8 +628,8 @@
           <div class="arch-arrow">↑↓</div>
           <div class="arch-layer arch-layer-1">
             <div class="layer-label">Layer 1</div>
-            <strong>Model Layer</strong>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Local GGUF · OpenAI · Anthropic · Ollama · vLLM</div>
+            <strong>State Layer</strong>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">SQLite · scheduler · sessions · budgets · audit</div>
           </div>
         </div>
 
@@ -637,45 +637,46 @@
           <h3 style="font-size:16px;font-weight:600;margin-bottom:20px;">Quick Start</h3>
           <div class="code-block">
             <div class="code-header">
-              <span>Install Harbor</span>
+              <span>Set up Harbor</span>
               <span>bash</span>
             </div>
             <div class="code-body">
-<span class="comment"># Install the CLI</span>
-<span class="keyword">pip</span> install harbor-agent
+<span class="comment"># Requires Bun ≥ 1.1 · alpha — expect breakage</span>
+<span class="comment"># Install from the alpha tarball (npm release lands at beta)</span>
+<span class="keyword">npm</span> i -g ./harbor-tugboat-0.1.0.tgz
 
-<span class="comment"># Initialize a workspace</span>
-<span class="keyword">harbor</span> init my-project
-<span class="keyword">cd</span> my-project
+<span class="comment"># Stand up the environment</span>
+<span class="keyword">harbor</span> init     <span class="comment"># seed agent_map.md + AI beacons</span>
+<span class="keyword">harbor</span> setup    <span class="comment"># build the directory tree from config</span>
+<span class="keyword">harbor</span> check    <span class="comment"># verify everything is wired</span>
 
-<span class="comment"># Configure your models</span>
-<span class="keyword">harbor</span> config set model.default anthropic/claude-sonnet-4
-<span class="keyword">harbor</span> config set model.fast local/llama-3.2-3b
-
-<span class="comment"># Run any agent in Harbor</span>
-<span class="keyword">harbor</span> run "Build a REST API for task management"
+<span class="comment"># Route an agent's skill access through Harbor</span>
+<span class="keyword">harbor</span> install --for claude-code
             </div>
           </div>
 
           <div class="code-block" style="margin-top:16px;">
             <div class="code-header">
-              <span>Config: harbor.yaml</span>
-              <span>yaml</span>
+              <span>Config: config.toml</span>
+              <span>toml</span>
             </div>
             <div class="code-body">
-<span class="comment"># harbor.yaml — single source of truth</span>
-<span class="fn">models</span>:
-  <span class="fn">default</span>: <span class="string">"openai/gpt-5"</span>
-  <span class="fn">fast</span>: <span class="string">"ollama/llama3.2:3b"</span>
+<span class="comment"># config.toml — rooms, skills, budgets</span>
+<span class="fn">[paths]</span>
+home = <span class="string">"~"</span>
+state_dir = <span class="string">"~/.agent-env"</span>
 
-<span class="fn">memory</span>:
-  <span class="fn">backend</span>: <span class="string">"sqlite"</span>
-  <span class="fn">path</span>: <span class="string">"~/.harbor/memory.db"</span>
+<span class="comment"># A room scopes which skills + MCP servers a session reaches</span>
+<span class="fn">[skills.rooms.research]</span>
+skills = [<span class="string">"web-search"</span>, <span class="string">"summarize"</span>]
+capabilities = [<span class="string">"read_skill"</span>, <span class="string">"list_skills"</span>]
 
-<span class="fn">tools</span>:
-  <span class="fn">filesystem</span>: <span class="keyword">true</span>
-  <span class="fn">web_search</span>: <span class="keyword">true</span>
-  <span class="fn">code_execution</span>: <span class="keyword">true</span>
+<span class="fn">[[skills.rooms.research.mcp.servers]]</span>
+name = <span class="string">"filesystem"</span>
+command = <span class="string">"npx"</span>
+
+<span class="fn">[budgets]</span>
+default_session_limit = <span class="keyword">100000</span>
             </div>
           </div>
         </div>
@@ -753,12 +754,12 @@
         <div class="step">
           <span class="step-number">01</span>
           <h4>Install</h4>
-          <p><code style="background:var(--bg-elevated);padding:2px 8px;border-radius:4px;font-size:13px;">pip install harbor-agent</code> or grab the binary from GitHub releases. No dependencies, no Docker, no cloud.</p>
+          <p>Alpha ships as a tarball — <code style="background:var(--bg-elevated);padding:2px 8px;border-radius:4px;font-size:13px;">npm i -g ./harbor-tugboat-0.1.0.tgz</code>. Needs Bun ≥ 1.1. No Docker, no cloud, no account.</p>
         </div>
         <div class="step">
           <span class="step-number">02</span>
           <h4>Configure</h4>
-          <p>Point Harbor at your preferred LLMs — local, cloud, or both. One YAML file controls models, tools, memory, and workspaces.</p>
+          <p>One TOML file — <code style="background:var(--bg-elevated);padding:2px 8px;border-radius:4px;font-size:13px;">config.toml</code> — defines your rooms, the skills and MCP servers each can reach, and per-session budgets.</p>
         </div>
         <div class="step">
           <span class="step-number">03</span>
@@ -768,7 +769,7 @@
         <div class="step">
           <span class="step-number">04</span>
           <h4>Ship</h4>
-          <p>Your agent gets persistent context, tool access, multi-model routing, and workspace isolation — out of the box. Focus on building.</p>
+          <p>Your agent gets persistent context, gated tool access, in-process budgets, and a full audit trail — out of the box. Focus on building.</p>
         </div>
       </div>
     </div>
