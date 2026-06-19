@@ -265,6 +265,11 @@
       margin-bottom: 16px;
     }
 
+    .icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
     .icon-purple { background: rgba(108, 92, 231, 0.15); color: var(--accent); }
     .icon-green { background: rgba(0, 210, 160, 0.15); color: var(--accent-green); }
     .icon-blue { background: rgba(74, 158, 255, 0.15); color: var(--accent-blue); }
@@ -566,32 +571,32 @@
       <p class="section-desc">Every AI coding tool wants to own your workflow. Harbor inverts that — it's the environment your agents run inside, not another agent you have to learn. Bring your own models, your own tools, your own way of working.</p>
       <div class="features-grid">
         <div class="feature-card">
-          <div class="icon icon-purple">🧩</div>
+          <div class="icon icon-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
           <h3>Agent-Neutral</h3>
           <p>Works with Claude Code, Codex, OpenCode, Cursor, goose, or any MCP-compatible agent. Harbor doesn't care which agent you use — it provides the runtime, context, and tool wiring underneath.</p>
         </div>
         <div class="feature-card">
-          <div class="icon icon-green">🔒</div>
+          <div class="icon icon-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="8" rx="2"/><rect x="2" y="13" width="20" height="8" rx="2"/><line x1="6" y1="7" x2="6.01" y2="7"/><line x1="6" y1="17" x2="6.01" y2="17"/></svg></div>
           <h3>Self-Hosted</h3>
           <p>Everything runs on your machine or your infra. No telemetry, no cloud dependency, no vendor gatekeeping. Your prompts, context, and code never leave your network unless you route them out. <strong>Harbor is a cooperative control plane, not an OS sandbox</strong> — agents share your user permissions and filesystem.</p>
         </div>
         <div class="feature-card">
-          <div class="icon icon-blue">🧠</div>
+          <div class="icon icon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
           <h3>Persistent Context</h3>
           <p>Agents lose context between sessions. Harbor doesn't. Structured memory, project state, and cross-session continuity that survives model swaps, agent changes, and terminal restarts.</p>
         </div>
         <div class="feature-card">
-          <div class="icon icon-orange">📊</div>
+          <div class="icon icon-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
           <h3>Budget Enforcement</h3>
           <p>Every session carries a token budget, checked and debited in-process on each skill load. Spending is tracked in real time and visible on the local dashboard — no agent quietly blows past its limit.</p>
         </div>
         <div class="feature-card">
-          <div class="icon icon-purple">📁</div>
+          <div class="icon icon-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
           <h3>Workspace Management</h3>
           <p>Each project gets a separate workspace with its own tools, models, and context store. Switch between projects without cross-contamination of context or config. Workspaces are organizationally separated by cooperative convention, not OS-level isolation — agents in different workspaces share your user account.</p>
         </div>
         <div class="feature-card">
-          <div class="icon icon-green">⚙️</div>
+          <div class="icon icon-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></div>
           <h3>Pluggable Tool System</h3>
           <p>Tools are just MCP servers or local scripts. Harbor discovers and wires them automatically. File system, web search, code execution, databases — add any tool your agents need without framework gymnastics.</p>
         </div>
@@ -691,7 +696,7 @@ default_session_limit = <span class="keyword">100000</span>
       <p class="section-desc">Harbor governs how cooperating agents load skills, spend budget, and enter rooms — and records every decision. It is not a cage for a hostile process. Here is exactly where the line sits.</p>
       <div class="trust-grid">
         <div class="feature-card trust-card">
-          <div class="icon icon-green">🛡️</div>
+          <div class="icon icon-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
           <h3>What Harbor enforces</h3>
           <div class="trust-item">
             <span class="trust-marker" style="color: var(--accent-green);">✓</span>
@@ -716,7 +721,7 @@ default_session_limit = <span class="keyword">100000</span>
           </div>
         </div>
         <div class="feature-card trust-card">
-          <div class="icon icon-orange">⚠️</div>
+          <div class="icon icon-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
           <h3>Where the boundary ends</h3>
           <div class="trust-item">
             <span class="trust-marker" style="color: var(--accent-orange);">—</span>
