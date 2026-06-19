@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TDH Labs — AI/ML Software Products</title>
-  <meta name="description" content="TDH Labs builds AI/ML software products that solve real problems. We ship.">
+  <title>TDH Labs — AI-Made Software</title>
+  <meta name="description" content="Zero human engineers. Real software products. An experiment: can AI alone ship production software?">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -37,7 +37,6 @@
       overflow-x: hidden;
     }
 
-    /* Background noise */
     body::before {
       content: '';
       position: fixed;
@@ -58,7 +57,6 @@
       z-index: 1;
     }
 
-    /* Navigation */
     nav {
       display: flex;
       align-items: center;
@@ -145,7 +143,6 @@
       border-color: var(--text-muted);
     }
 
-    /* Hero */
     .hero {
       padding: 100px 0 80px;
       text-align: center;
@@ -180,7 +177,7 @@
     .hero p {
       font-size: 20px;
       color: var(--text-secondary);
-      max-width: 600px;
+      max-width: 680px;
       margin: 0 auto 36px;
       line-height: 1.7;
     }
@@ -192,7 +189,6 @@
       flex-wrap: wrap;
     }
 
-    /* Products section */
     .section {
       padding: 80px 0;
     }
@@ -216,7 +212,7 @@
     .section-desc {
       font-size: 16px;
       color: var(--text-secondary);
-      max-width: 600px;
+      max-width: 680px;
       margin-bottom: 48px;
       line-height: 1.7;
     }
@@ -270,6 +266,15 @@
       margin-bottom: 16px;
     }
 
+    .product-card .tech-stack {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 8px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 12px;
+    }
+
     .product-card .status-badge {
       display: inline-flex;
       align-items: center;
@@ -290,7 +295,6 @@
       color: var(--accent-green);
     }
 
-    /* About / Approach */
     .approach-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -316,7 +320,37 @@
       line-height: 1.7;
     }
 
-    /* Footer */
+    .manifesto {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 48px;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .manifesto h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .manifesto p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .manifesto p:last-child {
+      margin-bottom: 0;
+    }
+
+    .manifesto strong {
+      color: var(--text-primary);
+    }
+
     footer {
       border-top: 1px solid var(--border);
       padding: 40px 0;
@@ -351,34 +385,6 @@
       color: var(--text-primary);
     }
 
-    /* Commits feed */
-    .commit-feed {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      line-height: 1.8;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-
-    .commit-feed .line {
-      color: var(--text-muted);
-      padding: 4px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .commit-feed .line:last-child {
-      border-bottom: none;
-    }
-
-    .commit-feed .hash {
-      color: var(--accent-green);
-    }
-
-    /* Responsive */
     @media (max-width: 768px) {
       .hero { padding: 60px 0 40px; }
       .hero h1 { font-size: 36px; letter-spacing: -1px; }
@@ -386,6 +392,7 @@
       .nav-links { display: none; }
       .section-title { font-size: 28px; }
       .products-grid { grid-template-columns: 1fr; }
+      .manifesto { padding: 24px; }
     }
   </style>
 </head>
@@ -398,7 +405,7 @@
       </a>
       <div class="nav-links">
         <a href="#products">Products</a>
-        <a href="#approach">Approach</a>
+        <a href="#manifesto">How It Works</a>
         <a href="https://github.com/TDH-Labs" target="_blank">GitHub</a>
         <a href="mailto:adam@tdhlabs.com" class="btn btn-primary">Contact</a>
       </div>
@@ -407,12 +414,12 @@
 
   <section class="hero">
     <div class="container">
-      <div class="hero-badge">⚡ AI/ML Products — Shipping Now</div>
-      <h1>Build smarter.<br>Ship faster.</h1>
-      <p>TDH Labs builds AI/ML-powered software that solves real problems for real people. We don't chase hype — we ship products that work.</p>
+      <div class="hero-badge">🧪 A Deliberate Experiment</div>
+      <h1>Zero human engineers.<br>Real software products.</h1>
+      <p>The LLM industry claims AI can write production code. We're here to test that — by building real products with an entirely AI-powered technical team. No developers. No designers. Just frontier models and domain experts.</p>
       <div class="hero-actions">
-        <a href="#products" class="btn btn-primary">View Products</a>
-        <a href="https://github.com/TDH-Labs" class="btn btn-outline" target="_blank">GitHub →</a>
+        <a href="#products" class="btn btn-primary">See What We've Built</a>
+        <a href="#manifesto" class="btn btn-outline">How It Works →</a>
       </div>
     </div>
   </section>
@@ -420,26 +427,72 @@
   <section id="products" class="section">
     <div class="container">
       <div class="section-label">Products</div>
-      <h2 class="section-title">What we're building</h2>
-      <p class="section-desc">AI/ML products designed for practical impact. More coming soon.</p>
+      <h2 class="section-title">Shipped by AI</h2>
+      <p class="section-desc">Every product on this page was built without a single human engineer or designer. The entire technical stack — architecture, code, UI, deployment — is generated, reviewed, and operated by AI agents across frontier and open-weight models.</p>
       <div class="products-grid">
         <div class="product-card">
-          <div class="icon icon-purple">🤖</div>
+          <div class="icon icon-purple">📋</div>
           <h3>First Product</h3>
-          <p>A powerful AI/ML tool launching soon. Built for real-world performance, not demos.</p>
+          <p>A practical AI/ML tool, built end-to-end by autonomous agents. Conceived by a domain expert, executed entirely by models.</p>
           <span class="status-badge status-soon">Coming Soon</span>
+          <div class="tech-stack">Built by: Claude · GPT-4 · DeepSeek · Hermes</div>
         </div>
         <div class="product-card">
           <div class="icon icon-green">⚡</div>
           <h3>Next Release</h3>
-          <p>Another AI-powered solution in the pipeline. Details to be announced.</p>
+          <p>Another proof point in the experiment. Same constraint: zero human code. Same premise: does AI actually ship?</p>
           <span class="status-badge status-soon">In Development</span>
+          <div class="tech-stack">Built by: Claude · GPT-4 · Gemini · Codex</div>
         </div>
         <div class="product-card">
           <div class="icon icon-blue">🔮</div>
-          <h3>Roadmap</h3>
-          <p>We're exploring applications at the intersection of ML, automation, and developer tooling.</p>
+          <h3>On The Radar</h3>
+          <p>A domain expert identified the need. The AI team is scoping feasibility. If viable, it ships — no humans in the loop.</p>
           <span class="status-badge status-soon">Research</span>
+          <div class="tech-stack">Built by: Multiple models, staging phase</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="manifesto" class="section">
+    <div class="container">
+      <div class="section-label">Method</div>
+      <h2 class="section-title">How TDH Labs Works</h2>
+      <p class="section-desc">We are not a traditional software company. We are an experiment running in public.</p>
+      <div class="manifesto">
+        <h3>🧪 The Premise</h3>
+        <p>
+          The builders and proponents of large language models say that AI can now write
+          <strong>most if not all of the code</strong> required to ship production software.
+          TDH Labs exists to test that claim — honestly, rigorously, and in public.
+        </p>
+        <p>
+          <strong>Our entire technical team is made up of AI agents.</strong>
+          Frontier closed-weight models and open-weight models alike. They architect the systems,
+          write every line of code, design every interface, manage every deployment, and triage
+          every bug. No pull request is reviewed by a human engineer. No UI mockup is touched by
+          a human designer.
+        </p>
+        <p>
+          <strong>The humans at TDH Labs are intentionally non-technical.</strong>
+          They are domain experts — lawyers, accountants, operators, specialists in their fields —
+          who have no training in software engineering, computer science, or design. They describe
+          what the product needs to do. AI agents decide how to build it.
+        </p>
+        <p>
+          <strong>This is not a thought piece.</strong> We ship real software, for sale,
+          under this constraint. Every product is a data point in an honest evaluation of
+          what AI development can — and cannot — do when left to its own devices.
+        </p>
+        <div style="text-align:center;margin-top:32px;">
+          <div style="display:inline-flex;gap:24px;text-align:center;">
+            <div><div style="font-size:32px;font-weight:800;color:var(--accent);">0</div><div style="font-size:12px;color:var(--text-muted);">Human Engineers</div></div>
+            <div style="width:1px;background:var(--border);"></div>
+            <div><div style="font-size:32px;font-weight:800;color:var(--accent);">100%</div><div style="font-size:12px;color:var(--text-muted);">AI-Generated Code</div></div>
+            <div style="width:1px;background:var(--border);"></div>
+            <div><div style="font-size:32px;font-weight:800;color:var(--accent);">Real</div><div style="font-size:12px;color:var(--text-muted);">Products For Sale</div></div>
+          </div>
         </div>
       </div>
     </div>
@@ -447,25 +500,25 @@
 
   <section id="approach" class="section">
     <div class="container">
-      <div class="section-label">How We Build</div>
-      <h2 class="section-title">Our approach</h2>
-      <p class="section-desc">Practical engineering. Real results. No vaporware.</p>
+      <div class="section-label">Principles</div>
+      <h2 class="section-title">The Rules</h2>
+      <p class="section-desc">Fixed constraints that define the experiment. No exceptions.</p>
       <div class="approach-grid">
         <div class="approach-item">
-          <h4>🎯 Solve Real Problems</h4>
-          <p>We build for actual use cases, not demos. Every product starts with a genuine need.</p>
+          <h4>🤖 No Human Engineers</h4>
+          <p>Zero humans with software training touch the code. Full stop. AI agents own the entire technical stack.</p>
         </div>
         <div class="approach-item">
-          <h4>🧠 AI-Native</h4>
-          <p>ML isn't a bolt-on — it's the foundation. We leverage models and data where they create the most leverage.</p>
+          <h4>🧑‍⚖️ Domain Experts Only</h4>
+          <p>The humans involved are specialists in law, finance, operations — not software. They define what, never how.</p>
         </div>
         <div class="approach-item">
-          <h4>🚀 Ship Iteratively</h4>
-          <p>Get something working fast, put it in users' hands, then refine. Perfection is the enemy of shipped.</p>
+          <h4>🏗️ Mixed-Model Stack</h4>
+          <p>We use every available model — Claude, GPT, Gemini, DeepSeek, open-weight — selecting by capability, not loyalty.</p>
         </div>
         <div class="approach-item">
-          <h4>🔧 Developer-First</h4>
-          <p>Clean APIs, good docs, composable tools. We build the kind of products we'd want to use ourselves.</p>
+          <h4>📊 Public Results</h4>
+          <p>Every product ships publicly. Every success and failure is a data point. We report honestly on what worked and what didn't.</p>
         </div>
       </div>
     </div>
@@ -481,7 +534,7 @@
         <a href="https://github.com/TDH-Labs" target="_blank">GitHub</a>
         <a href="mailto:adam@tdhlabs.com">Email</a>
       </div>
-      <p>© 2026 TDH Labs. All rights reserved.</p>
+      <p>© 2026 TDH Labs. Zero human engineers. Real software products.</p>
     </div>
   </footer>
 </body>
