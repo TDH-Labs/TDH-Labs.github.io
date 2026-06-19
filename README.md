@@ -14,7 +14,6 @@ An experiment: the LLM industry claims AI can write production code. TDH Labs ex
 
 | Product | Status | Description |
 |---------|--------|-------------|
-| Harbor | 🟢 Live · Open Source | Local agent-neutral control plane |
 | Ratatoskr | 🔮 In Development | IPv6 VPN on Yggdrasil mesh networking |
 
 ## The Rules
@@ -28,9 +27,6 @@ An experiment: the LLM industry claims AI can write production code. TDH Labs ex
 
 - **Website:** https://tdh-labs.github.io
 - **GitHub:** https://github.com/TDH-Labs
-- **Harbor:** https://github.com/adamrmatar/Harbor
-- **Ratatoskr:** https://github.com/TDH-Labs/ratatoskr (private)
-- **Email:** adam@tdhlabs.com
 
 ## License
 
