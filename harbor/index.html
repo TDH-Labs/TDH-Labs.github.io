@@ -192,10 +192,13 @@
     }
 
     .hero-subtitle {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 32px;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--text-primary);
+      max-width: 640px;
+      margin: 0 auto 20px;
+      line-height: 1.4;
+      letter-spacing: -0.3px;
     }
 
     .section {
@@ -277,6 +280,66 @@
       font-size: 14px;
       color: var(--text-secondary);
       line-height: 1.7;
+    }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .trust-card h3 {
+      font-size: 17px;
+      font-weight: 600;
+      margin: 4px 0 20px;
+    }
+
+    .trust-item {
+      display: flex;
+      gap: 12px;
+      padding: 14px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .trust-item:first-of-type {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .trust-marker {
+      flex-shrink: 0;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.6;
+    }
+
+    .trust-item-label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .trust-item-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .trust-note {
+      margin-top: 24px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .trust-note code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-primary);
     }
 
     .architecture {
@@ -457,11 +520,13 @@
     @media (max-width: 768px) {
       .hero { padding: 60px 0 40px; }
       .hero h1 { font-size: 32px; letter-spacing: -1px; }
+      .hero-subtitle { font-size: 18px; }
       .hero p { font-size: 15px; }
       .nav-links { display: none; }
       .section-title { font-size: 28px; }
       .features-grid { grid-template-columns: 1fr; }
       .architecture { grid-template-columns: 1fr; }
+      .trust-grid { grid-template-columns: 1fr; }
       .steps { grid-template-columns: 1fr; }
     }
   </style>
@@ -485,11 +550,11 @@
     <div class="container">
       <div class="hero-badge">α Alpha · expect bugs</div>
       <h1>Harbor</h1>
-      <p class="hero-subtitle">A local agent-neutral control plane</p>
-      <p>Self-hosted AI agent environment that manages context across models, tools, and workspaces — without vendor lock-in. Bring your own LLMs. Keep everything local. Ship with any agent framework.</p>
+      <p class="hero-subtitle">The environment your agents run in — not another agent to learn.</p>
+      <p>A self-hosted control plane that gives any AI agent persistent context, tool wiring, and multi-model routing — entirely on your machine, with no vendor lock-in.</p>
       <div class="hero-actions">
-        <a href="https://github.com/TDH-Labs/Harbor" class="btn btn-primary" target="_blank">GitHub →</a>
-        <a href="#features" class="btn btn-outline">Learn More ↓</a>
+        <a href="https://github.com/TDH-Labs/Harbor" class="btn btn-primary" target="_blank">View on GitHub →</a>
+        <a href="#features" class="btn btn-outline">How it works ↓</a>
       </div>
     </div>
   </section>
@@ -503,7 +568,7 @@
         <div class="feature-card">
           <div class="icon icon-purple">🧩</div>
           <h3>Agent-Neutral</h3>
-          <p>Works with Claude Code, Codex, OpenCode, Atlas, goose, or any MCP-compatible agent. Harbor doesn't care which agent you use — it provides the runtime, context, and tool wiring underneath.</p>
+          <p>Works with Claude Code, Codex, OpenCode, Cursor, goose, or any MCP-compatible agent. Harbor doesn't care which agent you use — it provides the runtime, context, and tool wiring underneath.</p>
         </div>
         <div class="feature-card">
           <div class="icon icon-green">🔒</div>
@@ -546,7 +611,7 @@
           <div class="arch-layer arch-layer-4">
             <div class="layer-label">Layer 4</div>
             <strong>Agent Interface</strong>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Claude · Codex · Atlas · goose · Custom</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Claude · Codex · Cursor · goose · Custom</div>
           </div>
           <div class="arch-arrow">↑↓</div>
           <div class="arch-layer arch-layer-3">
@@ -620,6 +685,67 @@
 
   <section class="section section-alt">
     <div class="container">
+      <div class="section-label">Trust model</div>
+      <h2 class="section-title">A control plane, not a sandbox.</h2>
+      <p class="section-desc">Harbor governs how cooperating agents load skills, spend budget, and enter rooms — and records every decision. It is not a cage for a hostile process. Here is exactly where the line sits.</p>
+      <div class="trust-grid">
+        <div class="feature-card trust-card">
+          <div class="icon icon-green">🛡️</div>
+          <h3>What Harbor enforces</h3>
+          <div class="trust-item">
+            <span class="trust-marker" style="color: var(--accent-green);">✓</span>
+            <div>
+              <div class="trust-item-label">Gated skill access</div>
+              <div class="trust-item-desc">Every skill load runs a room + budget + audit check.</div>
+            </div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-marker" style="color: var(--accent-green);">✓</span>
+            <div>
+              <div class="trust-item-label">In-process budgets</div>
+              <div class="trust-item-desc">Token limits debit on the hot path — no quiet overspend.</div>
+            </div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-marker" style="color: var(--accent-green);">✓</span>
+            <div>
+              <div class="trust-item-label">Full audit trail</div>
+              <div class="trust-item-desc">Every allow and deny logged with room, session, reason.</div>
+            </div>
+          </div>
+        </div>
+        <div class="feature-card trust-card">
+          <div class="icon icon-orange">⚠️</div>
+          <h3>Where the boundary ends</h3>
+          <div class="trust-item">
+            <span class="trust-marker" style="color: var(--accent-orange);">—</span>
+            <div>
+              <div class="trust-item-label">Not an OS sandbox</div>
+              <div class="trust-item-desc">Raw file access can read a skill directly, skipping the gate.</div>
+            </div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-marker" style="color: var(--accent-orange);">—</span>
+            <div>
+              <div class="trust-item-label">Rooms are cooperative</div>
+              <div class="trust-item-desc">The room comes from <code style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">AGENT_ENV_ROOM</code>; Harbor trusts it.</div>
+            </div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-marker" style="color: var(--accent-orange);">—</span>
+            <div>
+              <div class="trust-item-label">Open by default</div>
+              <div class="trust-item-desc">A room with no skill list allows all; gating is opt-in.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="trust-note">Harbor makes the cooperative path the easy, observable, budgeted one. It does not claim to be unbypassable OS-level isolation — that is a separate layer, on the roadmap, not in <code>0.1</code>.</div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
       <div class="section-label">Get Started</div>
       <h2 class="section-title">From zero to running in minutes</h2>
       <p class="section-desc">No accounts to create. No SaaS to sign up for. Just install, configure, and go.</p>
@@ -637,7 +763,7 @@
         <div class="step">
           <span class="step-number">03</span>
           <h4>Connect an Agent</h4>
-          <p>Harbor exposes an MCP server and a CLI. Connect Claude Code, Codex, Atlas, goose, or any MCP-native agent. No adapter needed.</p>
+          <p>Harbor exposes an MCP server and a CLI. Connect Claude Code, Codex, Cursor, goose, or any MCP-native agent. No adapter needed.</p>
         </div>
         <div class="step">
           <span class="step-number">04</span>
