@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TDH Labs — AI/ML Software Products</title>
+  <meta name="description" content="TDH Labs builds AI/ML software products that solve real problems. We ship.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg-card: #111118;
+      --bg-elevated: #16161f;
+      --border: #1e1e2a;
+      --text-primary: #e8e8f0;
+      --text-secondary: #8888a0;
+      --text-muted: #555570;
+      --accent: #6c5ce7;
+      --accent-glow: rgba(108, 92, 231, 0.15);
+      --accent-green: #00d2a0;
+      --accent-blue: #4a9eff;
+      --radius: 12px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Background noise */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(108, 92, 231, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(0, 210, 160, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(74, 158, 255, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-green));
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #5a4bd1);
+      color: #fff;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px var(--accent-glow);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: var(--bg-elevated);
+      border-color: var(--text-muted);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 100px 0 80px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid rgba(108, 92, 231, 0.2);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: 64px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 20px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Products section */
+    .section {
+      padding: 80px 0;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin-bottom: 48px;
+      line-height: 1.7;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-card:hover {
+      border-color: var(--text-muted);
+      transform: translateY(-2px);
+    }
+
+    .product-card .icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .icon-purple { background: rgba(108, 92, 231, 0.15); color: var(--accent); }
+    .icon-green { background: rgba(0, 210, 160, 0.15); color: var(--accent-green); }
+    .icon-blue { background: rgba(74, 158, 255, 0.15); color: var(--accent-blue); }
+
+    .product-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .product-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .product-card .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+
+    .status-soon {
+      background: rgba(108, 92, 231, 0.12);
+      color: var(--accent);
+    }
+
+    .status-live {
+      background: rgba(0, 210, 160, 0.12);
+      color: var(--accent-green);
+    }
+
+    /* About / Approach */
+    .approach-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .approach-item {
+      padding: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .approach-item h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .approach-item p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    footer .logo {
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    footer p {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    footer .social-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    footer .social-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+
+    footer .social-links a:hover {
+      color: var(--text-primary);
+    }
+
+    /* Commits feed */
+    .commit-feed {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .commit-feed .line {
+      color: var(--text-muted);
+      padding: 4px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .commit-feed .line:last-child {
+      border-bottom: none;
+    }
+
+    .commit-feed .hash {
+      color: var(--accent-green);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero { padding: 60px 0 40px; }
+      .hero h1 { font-size: 36px; letter-spacing: -1px; }
+      .hero p { font-size: 16px; }
+      .nav-links { display: none; }
+      .section-title { font-size: 28px; }
+      .products-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a href="/" class="logo">
+        <span class="logo-mark">T</span>
+        TDH Labs
+      </a>
+      <div class="nav-links">
+        <a href="#products">Products</a>
+        <a href="#approach">Approach</a>
+        <a href="https://github.com/TDH-Labs" target="_blank">GitHub</a>
+        <a href="mailto:contact@tdhlabs.com" class="btn btn-primary">Contact</a>
+      </div>
+    </nav>
+  </div>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">⚡ AI/ML Products — Shipping Now</div>
+      <h1>Build smarter.<br>Ship faster.</h1>
+      <p>TDH Labs builds AI/ML-powered software that solves real problems for real people. We don't chase hype — we ship products that work.</p>
+      <div class="hero-actions">
+        <a href="#products" class="btn btn-primary">View Products</a>
+        <a href="https://github.com/TDH-Labs" class="btn btn-outline" target="_blank">GitHub →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="products" class="section">
+    <div class="container">
+      <div class="section-label">Products</div>
+      <h2 class="section-title">What we're building</h2>
+      <p class="section-desc">AI/ML products designed for practical impact. More coming soon.</p>
+      <div class="products-grid">
+        <div class="product-card">
+          <div class="icon icon-purple">🤖</div>
+          <h3>First Product</h3>
+          <p>A powerful AI/ML tool launching soon. Built for real-world performance, not demos.</p>
+          <span class="status-badge status-soon">Coming Soon</span>
+        </div>
+        <div class="product-card">
+          <div class="icon icon-green">⚡</div>
+          <h3>Next Release</h3>
+          <p>Another AI-powered solution in the pipeline. Details to be announced.</p>
+          <span class="status-badge status-soon">In Development</span>
+        </div>
+        <div class="product-card">
+          <div class="icon icon-blue">🔮</div>
+          <h3>Roadmap</h3>
+          <p>We're exploring applications at the intersection of ML, automation, and developer tooling.</p>
+          <span class="status-badge status-soon">Research</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="approach" class="section">
+    <div class="container">
+      <div class="section-label">How We Build</div>
+      <h2 class="section-title">Our approach</h2>
+      <p class="section-desc">Practical engineering. Real results. No vaporware.</p>
+      <div class="approach-grid">
+        <div class="approach-item">
+          <h4>🎯 Solve Real Problems</h4>
+          <p>We build for actual use cases, not demos. Every product starts with a genuine need.</p>
+        </div>
+        <div class="approach-item">
+          <h4>🧠 AI-Native</h4>
+          <p>ML isn't a bolt-on — it's the foundation. We leverage models and data where they create the most leverage.</p>
+        </div>
+        <div class="approach-item">
+          <h4>🚀 Ship Iteratively</h4>
+          <p>Get something working fast, put it in users' hands, then refine. Perfection is the enemy of shipped.</p>
+        </div>
+        <div class="approach-item">
+          <h4>🔧 Developer-First</h4>
+          <p>Clean APIs, good docs, composable tools. We build the kind of products we'd want to use ourselves.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <a href="/" class="logo">
+        <span class="logo-mark">T</span>
+        TDH Labs
+      </a>
+      <div class="social-links">
+        <a href="https://github.com/TDH-Labs" target="_blank">GitHub</a>
+        <a href="mailto:contact@tdhlabs.com">Email</a>
+      </div>
+      <p>© 2026 TDH Labs. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
