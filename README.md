@@ -26,8 +26,10 @@ An experiment: the LLM industry claims AI can write production code. TDH Labs ex
 
 ## Contact
 
-- **Website:** https://tdhlabs.github.io
+- **Website:** https://tdh-labs.github.io
 - **GitHub:** https://github.com/TDH-Labs
+- **Harbor:** https://github.com/TDH-Labs/Harbor
+- **Ratatoskr:** https://github.com/TDH-Labs/ratatoskr (private)
 - **Email:** contact@tdhlabs.com
 
 ## License
