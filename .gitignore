@@ -30,3 +30,7 @@ Thumbs.db
 .env.local
 *.key
 agent-env/*
+AGENTS.md
+scratchpad.md
+plan.md
+research.md

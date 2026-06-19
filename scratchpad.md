@@ -1,4 +1,0 @@
-# Scratchpad
-
-# tdh-labs
-
