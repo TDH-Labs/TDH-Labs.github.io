@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harbor — TDH Labs</title>
+  <meta name="description" content="A local agent-neutral control plane. Self-hosted AI agent environment that manages context across models, tools, and workspaces — without vendor lock-in.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg-card: #111118;
+      --bg-elevated: #16161f;
+      --border: #1e1e2a;
+      --text-primary: #e8e8f0;
+      --text-secondary: #8888a0;
+      --text-muted: #555570;
+      --accent: #6c5ce7;
+      --accent-glow: rgba(108, 92, 231, 0.15);
+      --accent-green: #00d2a0;
+      --accent-blue: #4a9eff;
+      --accent-orange: #ffa500;
+      --radius: 12px;
+      --harbor-gradient: linear-gradient(135deg, #6c5ce7, #a855f7);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 30% 20%, rgba(108, 92, 231, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 60%, rgba(168, 85, 247, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 90%, rgba(74, 158, 255, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: var(--harbor-gradient);
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--harbor-gradient);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(108, 92, 231, 0.25);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px rgba(108, 92, 231, 0.35);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: var(--bg-elevated);
+      border-color: var(--text-muted);
+    }
+
+    .hero {
+      padding: 80px 0 60px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      background: rgba(255, 165, 0, 0.1);
+      color: var(--accent-orange);
+      border: 1px solid rgba(255, 165, 0, 0.2);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff 30%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 680px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-subtitle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .section {
+      padding: 80px 0;
+    }
+
+    .section-alt {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 680px;
+      margin-bottom: 48px;
+      line-height: 1.7;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      transition: all 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: var(--text-muted);
+      transform: translateY(-2px);
+    }
+
+    .feature-card .icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+
+    .icon-purple { background: rgba(108, 92, 231, 0.15); color: var(--accent); }
+    .icon-green { background: rgba(0, 210, 160, 0.15); color: var(--accent-green); }
+    .icon-blue { background: rgba(74, 158, 255, 0.15); color: var(--accent-blue); }
+    .icon-orange { background: rgba(255, 165, 0, 0.15); color: var(--accent-orange); }
+
+    .feature-card h3 {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .architecture {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .arch-diagram {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+    }
+
+    .arch-diagram h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .arch-layer {
+      padding: 16px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .arch-layer:last-child { margin-bottom: 0; }
+
+    .arch-layer-1 { background: rgba(108, 92, 231, 0.12); border: 1px solid rgba(108, 92, 231, 0.2); }
+    .arch-layer-2 { background: rgba(74, 158, 255, 0.12); border: 1px solid rgba(74, 158, 255, 0.2); }
+    .arch-layer-3 { background: rgba(0, 210, 160, 0.12); border: 1px solid rgba(0, 210, 160, 0.2); }
+    .arch-layer-4 { background: rgba(255, 165, 0, 0.12); border: 1px solid rgba(255, 165, 0, 0.2); }
+
+    .arch-layer .layer-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .arch-arrow {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 20px;
+      padding: 4px 0;
+    }
+
+    .code-block {
+      background: #0d0d14;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+    }
+
+    .code-body {
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      overflow-x: auto;
+    }
+
+    .code-body .keyword { color: #a855f7; }
+    .code-body .string { color: #00d2a0; }
+    .code-body .comment { color: #555570; }
+    .code-body .fn { color: #4a9eff; }
+    .code-body .type { color: #f59e0b; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .step {
+      padding: 24px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      position: relative;
+    }
+
+    .step-number {
+      font-size: 32px;
+      font-weight: 800;
+      color: rgba(108, 92, 231, 0.2);
+      position: absolute;
+      top: 16px;
+      right: 20px;
+    }
+
+    .step h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .step p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .cta-section {
+      text-align: center;
+      padding: 80px 0;
+    }
+
+    .cta-section h2 {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+
+    .cta-section p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    footer .logo {
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    footer p {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    footer .social-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    footer .social-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+
+    footer .social-links a:hover {
+      color: var(--text-primary);
+    }
+
+    @media (max-width: 768px) {
+      .hero { padding: 60px 0 40px; }
+      .hero h1 { font-size: 32px; letter-spacing: -1px; }
+      .hero p { font-size: 15px; }
+      .nav-links { display: none; }
+      .section-title { font-size: 28px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .architecture { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a href="/" class="logo">
+        <span class="logo-mark">T</span>
+        TDH Labs
+      </a>
+      <div class="nav-links">
+        <a href="/harbor/">Harbor</a>
+        <a href="/#products">Products</a>
+        <a href="/#manifesto">How It Works</a>
+      </div>
+    </nav>
+  </div>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">α Alpha — Public Preview</div>
+      <h1>Harbor</h1>
+      <p class="hero-subtitle">A local agent-neutral control plane</p>
+      <p>Self-hosted AI agent environment that manages context across models, tools, and workspaces — without vendor lock-in. Bring your own LLMs. Keep everything local. Ship with any agent framework.</p>
+      <div class="hero-actions">
+        <a href="https://github.com/TDH-Labs/Harbor" class="btn btn-primary" target="_blank">GitHub →</a>
+        <a href="#features" class="btn btn-outline">Learn More ↓</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="section section-alt">
+    <div class="container">
+      <div class="section-label">Why Harbor</div>
+      <h2 class="section-title">The agent environment,<br>not the agent.</h2>
+      <p class="section-desc">Every AI coding tool wants to own your workflow. Harbor inverts that — it's the environment your agents run inside, not another agent you have to learn. Bring your own models, your own tools, your own way of working.</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="icon icon-purple">🧩</div>
+          <h3>Agent-Neutral</h3>
+          <p>Works with Claude Code, Codex, OpenCode, Hermes, goose, or any MCP-compatible agent. Harbor doesn't care which agent you use — it provides the runtime, context, and tool wiring underneath.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon icon-green">🔒</div>
+          <h3>Self-Hosted & Private</h3>
+          <p>Everything runs on your machine or your infra. No telemetry, no cloud dependency, no vendor gatekeeping. Your prompts, context, and code never leave your network unless you route them out.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon icon-blue">🧠</div>
+          <h3>Persistent Context</h3>
+          <p>Agents lose context between sessions. Harbor doesn't. Structured memory, project state, and cross-session continuity that survives model swaps, agent changes, and terminal restarts.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon icon-orange">🔌</div>
+          <h3>Multi-Model Routing</h3>
+          <p>Route different tasks to different models. Cheap model for file search, capable model for architecture, fast model for edits. Run local GGUF quantized models alongside cloud APIs from a single config.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon icon-purple">📁</div>
+          <h3>Workspace Management</h3>
+          <p>Each project gets an isolated workspace with its own tools, models, and context store. Switch between projects instantly without cross-contamination. Per-project skill libraries and memory stores.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon icon-green">⚙️</div>
+          <h3>Pluggable Tool System</h3>
+          <p>Tools are just MCP servers or local scripts. Harbor discovers and wires them automatically. File system, web search, code execution, databases — add any tool your agents need without framework gymnastics.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-label">Architecture</div>
+      <h2 class="section-title">How it works</h2>
+      <p class="section-desc">Harbor sits between your agents and your infrastructure — providing context, managing tools, and persisting state across every session.</p>
+
+      <div class="architecture">
+        <div class="arch-diagram">
+          <h3>Harbor Stack</h3>
+          <div class="arch-layer arch-layer-4">
+            <div class="layer-label">Layer 4</div>
+            <strong>Agent Interface</strong>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Claude · Codex · Hermes · goose · Custom</div>
+          </div>
+          <div class="arch-arrow">↑↓</div>
+          <div class="arch-layer arch-layer-3">
+            <div class="layer-label">Layer 3</div>
+            <strong>Harbor Core</strong>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Context Engine · Memory Store · Workspace Manager</div>
+          </div>
+          <div class="arch-arrow">↑↓</div>
+          <div class="arch-layer arch-layer-2">
+            <div class="layer-label">Layer 2</div>
+            <strong>Tool Runtime</strong>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">MCP · File System · Sandbox · Network</div>
+          </div>
+          <div class="arch-arrow">↑↓</div>
+          <div class="arch-layer arch-layer-1">
+            <div class="layer-label">Layer 1</div>
+            <strong>Model Layer</strong>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Local GGUF · OpenAI · Anthropic · Ollama · vLLM</div>
+          </div>
+        </div>
+
+        <div>
+          <h3 style="font-size:16px;font-weight:600;margin-bottom:20px;">Quick Start</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <span>Install Harbor</span>
+              <span>bash</span>
+            </div>
+            <div class="code-body">
+<span class="comment"># Install the CLI</span>
+<span class="keyword">pip</span> install harbor-agent
+
+<span class="comment"># Initialize a workspace</span>
+<span class="keyword">harbor</span> init my-project
+<span class="keyword">cd</span> my-project
+
+<span class="comment"># Configure your models</span>
+<span class="keyword">harbor</span> config set model.default anthropic/claude-sonnet-4
+<span class="keyword">harbor</span> config set model.fast local/llama-3.2-3b
+
+<span class="comment"># Run any agent in Harbor</span>
+<span class="keyword">harbor</span> run "Build a REST API for task management"
+            </div>
+          </div>
+
+          <div class="code-block" style="margin-top:16px;">
+            <div class="code-header">
+              <span>Config: harbor.yaml</span>
+              <span>yaml</span>
+            </div>
+            <div class="code-body">
+<span class="comment"># harbor.yaml — single source of truth</span>
+<span class="fn">models</span>:
+  <span class="fn">default</span>: <span class="string">"openai/gpt-5"</span>
+  <span class="fn">fast</span>: <span class="string">"ollama/llama3.2:3b"</span>
+
+<span class="fn">memory</span>:
+  <span class="fn">backend</span>: <span class="string">"sqlite"</span>
+  <span class="fn">path</span>: <span class="string">"~/.harbor/memory.db"</span>
+
+<span class="fn">tools</span>:
+  <span class="fn">filesystem</span>: <span class="keyword">true</span>
+  <span class="fn">web_search</span>: <span class="keyword">true</span>
+  <span class="fn">code_execution</span>: <span class="keyword">true</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-label">Get Started</div>
+      <h2 class="section-title">From zero to running in minutes</h2>
+      <p class="section-desc">No accounts to create. No SaaS to sign up for. Just install, configure, and go.</p>
+      <div class="steps">
+        <div class="step">
+          <span class="step-number">01</span>
+          <h4>Install</h4>
+          <p><code style="background:var(--bg-elevated);padding:2px 8px;border-radius:4px;font-size:13px;">pip install harbor-agent</code> or grab the binary from GitHub releases. No dependencies, no Docker, no cloud.</p>
+        </div>
+        <div class="step">
+          <span class="step-number">02</span>
+          <h4>Configure</h4>
+          <p>Point Harbor at your preferred LLMs — local, cloud, or both. One YAML file controls models, tools, memory, and workspaces.</p>
+        </div>
+        <div class="step">
+          <span class="step-number">03</span>
+          <h4>Connect an Agent</h4>
+          <p>Harbor exposes an MCP server and a CLI. Connect Claude Code, Codex, Hermes, goose, or any MCP-native agent. No adapter needed.</p>
+        </div>
+        <div class="step">
+          <span class="step-number">04</span>
+          <h4>Ship</h4>
+          <p>Your agent gets persistent context, tool access, multi-model routing, and workspace isolation — out of the box. Focus on building.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>Built by AI. For AI.</h2>
+      <p>Harbor was designed, coded, and shipped by AI agents — the same kind it's designed to manage. It's a dogfood product in the truest sense.</p>
+      <div class="hero-actions">
+        <a href="https://github.com/TDH-Labs/Harbor" class="btn btn-primary" target="_blank">Star on GitHub →</a>
+        <a href="/" class="btn btn-outline">← Back to TDH Labs</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <a href="/" class="logo">
+        <span class="logo-mark">T</span>
+        TDH Labs
+      </a>
+      <div class="social-links">
+        <a href="https://github.com/TDH-Labs" target="_blank">GitHub</a>
+        <a href="/harbor/">Harbor</a>
+        <a href="/#manifesto">How It Works</a>
+      </div>
+      <p>© 2026 TDH Labs. Zero human engineers. Real software products.</p>
+    </div>
+  </footer>
+</body>
+</html>
