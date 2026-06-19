@@ -7,27 +7,30 @@
   <meta name="description" content="A local agent-neutral control plane. Self-hosted AI agent environment that manages context across models, tools, and workspaces — without vendor lock-in.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0a0a0f;
-      --bg-card: #111118;
+      --bg-card: #101017;
       --bg-elevated: #16161f;
-      --border: #1e1e2a;
-      --text-primary: #e8e8f0;
-      --text-secondary: #8888a0;
-      --text-muted: #555570;
-      --accent: #6c5ce7;
-      --accent-glow: rgba(108, 92, 231, 0.15);
+      --bg-code: #0c0c12;
+      --border: #1f1f2b;
+      --border-strong: #2b2b3a;
+      --text-primary: #ededf3;
+      --text-secondary: #9292a6;
+      --text-muted: #5a5a72;
+      --accent: #7c6cf0;
+      --accent-2: #a855f7;
       --accent-green: #00d2a0;
       --accent-blue: #4a9eff;
       --accent-orange: #ffa500;
-      --radius: 12px;
-      --harbor-gradient: linear-gradient(135deg, #6c5ce7, #a855f7);
+      --radius: 14px;
+      --radius-lg: 18px;
+      --harbor-gradient: linear-gradient(135deg, #7c6cf0, #a855f7);
+      --maxw: 1120px;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -42,36 +45,61 @@
     body::before {
       content: '';
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+      background-size: 52px 52px;
+      -webkit-mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 0%, transparent 75%);
+      mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 0%, transparent 75%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
       background:
-        radial-gradient(ellipse at 30% 20%, rgba(108, 92, 231, 0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 70% 60%, rgba(168, 85, 247, 0.04) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 90%, rgba(74, 158, 255, 0.03) 0%, transparent 50%);
+        radial-gradient(ellipse 50% 40% at 50% -5%, rgba(124, 108, 240, 0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 85% 25%, rgba(168, 85, 247, 0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 12% 60%, rgba(74, 158, 255, 0.06) 0%, transparent 70%);
       pointer-events: none;
       z-index: 0;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: var(--maxw);
       margin: 0 auto;
       padding: 0 24px;
       position: relative;
       z-index: 1;
     }
 
+    a { color: inherit; }
+
+    /* ── Nav ─────────────────────────────────────────────── */
+    .nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(10, 10, 15, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
     nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px 0;
-      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
     }
 
     .logo {
-      font-size: 22px;
+      font-size: 17px;
       font-weight: 700;
-      letter-spacing: -0.5px;
-      color: var(--text-primary);
+      letter-spacing: -0.3px;
       text-decoration: none;
       display: flex;
       align-items: center;
@@ -82,21 +110,17 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       background: var(--harbor-gradient);
-      border-radius: 8px;
+      border-radius: 9px;
       font-weight: 800;
       font-size: 14px;
       color: #fff;
+      box-shadow: 0 4px 16px rgba(124, 108, 240, 0.35);
     }
 
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      align-items: center;
-    }
-
+    .nav-links { display: flex; gap: 28px; align-items: center; }
     .nav-links a {
       color: var(--text-secondary);
       text-decoration: none;
@@ -104,234 +128,310 @@
       font-weight: 500;
       transition: color 0.2s;
     }
+    .nav-links a:hover { color: var(--text-primary); }
 
-    .nav-links a:hover {
-      color: var(--text-primary);
-    }
-
+    /* ── Buttons ─────────────────────────────────────────── */
     .btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 20px;
-      border-radius: 8px;
+      padding: 11px 20px;
+      border-radius: 10px;
       font-size: 14px;
       font-weight: 600;
       text-decoration: none;
-      transition: all 0.2s;
+      transition: transform 0.15s, box-shadow 0.2s, background 0.2s, border-color 0.2s;
       cursor: pointer;
       border: none;
+      white-space: nowrap;
     }
-
     .btn-primary {
       background: var(--harbor-gradient);
       color: #fff;
-      box-shadow: 0 4px 20px rgba(108, 92, 231, 0.25);
+      box-shadow: 0 6px 24px rgba(124, 108, 240, 0.3);
     }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 28px rgba(108, 92, 231, 0.35);
-    }
-
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(124, 108, 240, 0.45); }
     .btn-outline {
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-strong);
       color: var(--text-primary);
-      background: transparent;
+      background: rgba(255,255,255,0.02);
     }
+    .btn-outline:hover { background: var(--bg-elevated); border-color: var(--text-muted); }
+    .btn-sm { padding: 8px 16px; font-size: 13px; }
 
-    .btn-outline:hover {
-      background: var(--bg-elevated);
-      border-color: var(--text-muted);
-    }
-
-    .hero {
-      padding: 80px 0 60px;
-      text-align: center;
-    }
+    /* ── Hero ────────────────────────────────────────────── */
+    .hero { padding: 96px 0 64px; text-align: center; }
 
     .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
+      border-radius: 999px;
+      font-size: 12.5px;
       font-weight: 500;
       background: rgba(255, 165, 0, 0.1);
       color: var(--accent-orange);
-      border: 1px solid rgba(255, 165, 0, 0.2);
-      margin-bottom: 24px;
+      border: 1px solid rgba(255, 165, 0, 0.25);
+      margin-bottom: 28px;
     }
 
     .hero h1 {
-      font-size: 56px;
+      font-size: 76px;
       font-weight: 800;
-      letter-spacing: -2px;
-      line-height: 1.1;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, #fff 30%, #a855f7 100%);
+      letter-spacing: -3px;
+      line-height: 1.02;
+      margin-bottom: 22px;
+      background: linear-gradient(180deg, #fff 35%, #b9b1f5 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    .hero p {
-      font-size: 18px;
+    .hero-subtitle {
+      font-size: 23px;
+      font-weight: 500;
+      color: var(--text-primary);
+      max-width: 660px;
+      margin: 0 auto 18px;
+      line-height: 1.4;
+      letter-spacing: -0.4px;
+    }
+
+    .hero-lede {
+      font-size: 17px;
       color: var(--text-secondary);
-      max-width: 680px;
-      margin: 0 auto 32px;
+      max-width: 620px;
+      margin: 0 auto 34px;
       line-height: 1.7;
     }
 
-    .hero-actions {
+    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    /* ── Terminal visual ─────────────────────────────────── */
+    .terminal {
+      max-width: 680px;
+      margin: 56px auto 0;
+      background: var(--bg-code);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      text-align: left;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(124,108,240,0.06);
+    }
+    .terminal-bar {
       display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 16px;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
     }
-
-    .hero-subtitle {
-      font-size: 22px;
-      font-weight: 500;
-      color: var(--text-primary);
-      max-width: 640px;
-      margin: 0 auto 20px;
-      line-height: 1.4;
-      letter-spacing: -0.3px;
+    .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .terminal-title {
+      margin-left: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
     }
-
-    .section {
-      padding: 80px 0;
+    .terminal-body {
+      padding: 22px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      line-height: 2;
+      color: var(--text-secondary);
+      overflow-x: auto;
     }
+    .terminal-body .p { color: var(--accent); }
+    .terminal-body .ok { color: var(--accent-green); }
+    .terminal-body .c { color: var(--text-muted); }
 
+    /* ── Sections ────────────────────────────────────────── */
+    .section { padding: 104px 0; position: relative; z-index: 1; }
     .section-alt {
-      background: var(--bg-card);
+      background: rgba(255,255,255,0.012);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
-
+    .section-head { max-width: 720px; margin-bottom: 56px; }
     .section-label {
       font-size: 12px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 2.5px;
       color: var(--accent);
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
-
     .section-title {
-      font-size: 36px;
-      font-weight: 700;
-      letter-spacing: -1px;
-      margin-bottom: 16px;
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.08;
+      margin-bottom: 18px;
     }
+    .section-desc { font-size: 17px; color: var(--text-secondary); line-height: 1.7; }
 
-    .section-desc {
-      font-size: 16px;
-      color: var(--text-secondary);
-      max-width: 680px;
-      margin-bottom: 48px;
-      line-height: 1.7;
-    }
-
-    .features-grid {
+    /* ── Bento features ──────────────────────────────────── */
+    .bento {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 16px;
     }
-
-    .feature-card {
-      background: var(--bg);
+    .cell {
+      grid-column: span 2;
+      background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 32px;
-      transition: all 0.2s;
+      padding: 28px;
+      transition: border-color 0.2s, transform 0.2s, background 0.2s;
     }
+    .cell:hover { border-color: var(--border-strong); transform: translateY(-3px); background: #12121b; }
+    .cell-wide { grid-column: span 4; }
+    .cell-full { grid-column: span 6; }
 
-    .feature-card:hover {
-      border-color: var(--text-muted);
-      transform: translateY(-2px);
-    }
-
-    .feature-card .icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      display: flex;
+    .icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 11px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
+    .icon svg { width: 22px; height: 22px; }
+    .icon-purple { background: rgba(124, 108, 240, 0.14); color: var(--accent); }
+    .icon-green  { background: rgba(0, 210, 160, 0.14); color: var(--accent-green); }
+    .icon-blue   { background: rgba(74, 158, 255, 0.14); color: var(--accent-blue); }
+    .icon-orange { background: rgba(255, 165, 0, 0.14); color: var(--accent-orange); }
 
-    .icon svg {
-      width: 22px;
-      height: 22px;
-    }
+    .cell h3 { font-size: 17px; font-weight: 600; margin-bottom: 10px; letter-spacing: -0.2px; }
+    .cell p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+    .cell p strong { color: var(--text-primary); font-weight: 600; }
 
-    .icon-purple { background: rgba(108, 92, 231, 0.15); color: var(--accent); }
-    .icon-green { background: rgba(0, 210, 160, 0.15); color: var(--accent-green); }
-    .icon-blue { background: rgba(74, 158, 255, 0.15); color: var(--accent-blue); }
-    .icon-orange { background: rgba(255, 165, 0, 0.15); color: var(--accent-orange); }
-
-    .feature-card h3 {
-      font-size: 17px;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-
-    .feature-card p {
-      font-size: 14px;
+    .agent-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .agent-chips span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
       color: var(--text-secondary);
-      line-height: 1.7;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 5px 10px;
     }
 
-    .trust-grid {
+    /* ── How it works: the gate flow ─────────────────────── */
+    .howgrid { display: grid; grid-template-columns: 1fr; gap: 36px; }
+    .how-code { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .flow { display: flex; flex-direction: column; gap: 16px; }
+
+    .lane {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 230px 1fr 168px;
       gap: 24px;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 26px;
     }
+    .lane-req { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text-primary); }
+    .lane-req .arg { color: var(--accent-green); }
+    .lane.deny-lane .lane-req .arg { color: var(--accent-orange); }
+    .lane-req small { display: block; color: var(--text-muted); font-size: 11px; margin-top: 7px; }
 
-    .trust-card h3 {
-      font-size: 17px;
-      font-weight: 600;
-      margin: 4px 0 20px;
+    .rail { display: flex; align-items: flex-start; position: relative; }
+    .rail::before { content: ''; position: absolute; left: 13%; right: 13%; top: 17px; height: 2px; background: var(--border-strong); }
+    .gate { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+    .gate-node {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid var(--border-strong); background: var(--bg-card);
+      font-size: 14px; font-weight: 700; position: relative; z-index: 1;
     }
+    .gate-label { font-size: 12.5px; font-weight: 600; }
+    .gate-sub { font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+    .gate.ok .gate-node { border-color: var(--accent-green); color: var(--accent-green); }
+    .gate.deny .gate-node, .gate.rec .gate-node { border-color: var(--accent-orange); color: var(--accent-orange); }
+    .gate.skip { opacity: .35; }
 
-    .trust-item {
+    .lane-out { font-size: 13px; font-weight: 600; text-align: center; padding: 12px 14px; border-radius: 10px; line-height: 1.35; }
+    .lane-out small { display: block; font-weight: 400; font-size: 11px; margin-top: 3px; color: var(--text-muted); }
+    .lane-out.ok { color: var(--accent-green); background: rgba(0,210,160,0.1); border: 1px solid rgba(0,210,160,0.25); }
+    .lane-out.deny { color: var(--accent-orange); background: rgba(255,165,0,0.1); border: 1px solid rgba(255,165,0,0.25); }
+
+    .lane.allow .rail::after {
+      content: ''; position: absolute; top: 14px; left: 13%;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent-green); box-shadow: 0 0 12px 2px rgba(0,210,160,0.7);
+      animation: travel 3.2s ease-in-out infinite;
+    }
+    @keyframes travel { 0% { left: 13%; opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { left: 87%; opacity: 0; } }
+
+    /* ── Progressive loading: tier ladder ────────────────── */
+    .ladder { display: flex; flex-direction: column; gap: 16px; max-width: 840px; }
+    .tier { display: grid; grid-template-columns: 170px 1fr; gap: 22px; align-items: start; }
+    .tier-name { font-size: 14px; font-weight: 600; padding-top: 9px; }
+    .tier-name small { display: block; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); margin-top: 3px; font-weight: 400; }
+    .tier-track { height: 40px; background: rgba(255,255,255,0.025); border-radius: 9px; }
+    .tier-fill { height: 100%; border-radius: 9px; display: flex; align-items: center; padding: 0 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; white-space: nowrap; }
+    .t-index  { background: rgba(0,210,160,0.16);  border: 1px solid rgba(0,210,160,0.35);  color: var(--accent-green); }
+    .t-digest { background: rgba(74,158,255,0.16);  border: 1px solid rgba(74,158,255,0.35);  color: var(--accent-blue); }
+    .t-full   { background: rgba(124,108,240,0.16); border: 1px solid rgba(124,108,240,0.35); color: var(--accent); }
+    .tier-when { font-size: 13px; color: var(--text-secondary); margin-top: 8px; }
+    .ladder-note { margin-top: 30px; font-size: 15px; color: var(--text-secondary); max-width: 740px; line-height: 1.75; }
+    .ladder-note strong { color: var(--text-primary); font-weight: 600; }
+
+    /* ── Code blocks ─────────────────────────────────────── */
+    .code-block {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .code-block + .code-block { margin-top: 16px; }
+    .code-header {
       display: flex;
-      gap: 12px;
-      padding: 14px 0;
-      border-top: 1px solid var(--border);
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 16px;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
     }
-
-    .trust-item:first-of-type {
-      border-top: none;
-      padding-top: 0;
-    }
-
-    .trust-marker {
-      flex-shrink: 0;
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 1.6;
-    }
-
-    .trust-item-label {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 3px;
-    }
-
-    .trust-item-desc {
+    .code-body {
+      padding: 18px;
+      font-family: 'JetBrains Mono', monospace;
       font-size: 13px;
+      line-height: 1.8;
       color: var(--text-secondary);
-      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
     }
+    .code-body .keyword { color: #b794ff; }
+    .code-body .string  { color: #00d2a0; }
+    .code-body .comment { color: #5a5a72; }
+    .code-body .fn      { color: #4a9eff; }
 
+    /* ── Trust ───────────────────────────────────────────── */
+    .trust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .trust-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+    .trust-card h3 { font-size: 17px; font-weight: 600; margin: 4px 0 18px; }
+    .trust-item { display: flex; gap: 12px; padding: 13px 0; border-top: 1px solid var(--border); }
+    .trust-item:first-of-type { border-top: none; padding-top: 0; }
+    .trust-marker { flex-shrink: 0; font-size: 14px; font-weight: 700; line-height: 1.6; }
+    .trust-item-label { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .trust-item-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+    .trust-item-desc code, .trust-note code { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-primary); }
     .trust-note {
-      margin-top: 24px;
+      grid-column: 1 / -1;
+      margin-top: 16px;
       background: var(--bg-elevated);
       border: 1px solid var(--border);
       border-radius: var(--radius);
@@ -341,214 +441,104 @@
       line-height: 1.7;
     }
 
-    .trust-note code {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--text-primary);
-    }
-
-    .architecture {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-      align-items: start;
-    }
-
-    .arch-diagram {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 32px;
-    }
-
-    .arch-diagram h3 {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .arch-layer {
-      padding: 16px;
-      margin-bottom: 12px;
-      border-radius: 8px;
-      text-align: center;
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .arch-layer:last-child { margin-bottom: 0; }
-
-    .arch-layer-1 { background: rgba(108, 92, 231, 0.12); border: 1px solid rgba(108, 92, 231, 0.2); }
-    .arch-layer-2 { background: rgba(74, 158, 255, 0.12); border: 1px solid rgba(74, 158, 255, 0.2); }
-    .arch-layer-3 { background: rgba(0, 210, 160, 0.12); border: 1px solid rgba(0, 210, 160, 0.2); }
-    .arch-layer-4 { background: rgba(255, 165, 0, 0.12); border: 1px solid rgba(255, 165, 0, 0.2); }
-
-    .arch-layer .layer-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    .arch-arrow {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 20px;
-      padding: 4px 0;
-    }
-
-    .code-block {
-      background: #0d0d14;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
-    .code-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px;
-      background: var(--bg-elevated);
-      border-bottom: 1px solid var(--border);
-      font-size: 12px;
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--text-muted);
-    }
-
-    .code-body {
-      padding: 16px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      line-height: 1.7;
-      color: var(--text-secondary);
-      overflow-x: auto;
-    }
-
-    .code-body .keyword { color: #a855f7; }
-    .code-body .string { color: #00d2a0; }
-    .code-body .comment { color: #555570; }
-    .code-body .fn { color: #4a9eff; }
-    .code-body .type { color: #f59e0b; }
-
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
-    }
-
+    /* ── Steps ───────────────────────────────────────────── */
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
     .step {
       padding: 24px;
-      background: var(--bg);
+      background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       position: relative;
     }
-
     .step-number {
-      font-size: 32px;
-      font-weight: 800;
-      color: rgba(108, 92, 231, 0.2);
-      position: absolute;
-      top: 16px;
-      right: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 14px;
+      display: block;
     }
+    .step h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+    .step p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.65; }
+    .step p code { background: var(--bg-elevated); padding: 2px 7px; border-radius: 5px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-primary); }
 
-    .step h4 {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 8px;
+    /* ── CTA + footer ────────────────────────────────────── */
+    .cta-section { padding: 112px 0; text-align: center; }
+    .cta-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 56px 40px;
       position: relative;
+      overflow: hidden;
+    }
+    .cta-inner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 0%, rgba(124,108,240,0.12), transparent 70%);
+      pointer-events: none;
+    }
+    .cta-section h2 { font-size: 40px; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 16px; position: relative; }
+    .cta-section p { font-size: 16px; color: var(--text-secondary); max-width: 560px; margin: 0 auto 32px; line-height: 1.7; position: relative; }
+    .cta-section .hero-actions { position: relative; }
+
+    footer { border-top: 1px solid var(--border); padding: 44px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text-primary); }
+    .footer-copy { color: var(--text-muted); font-size: 13px; }
+
+    /* ── Reveal animation ────────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .lane.allow .rail::after { display: none; }
+      html { scroll-behavior: auto; }
     }
 
-    .step p {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.7;
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 880px) {
+      .how-code { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: repeat(2, 1fr); }
     }
-
-    .cta-section {
-      text-align: center;
-      padding: 80px 0;
-    }
-
-    .cta-section h2 {
-      font-size: 36px;
-      font-weight: 700;
-      letter-spacing: -1px;
-      margin-bottom: 16px;
-    }
-
-    .cta-section p {
-      font-size: 16px;
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 32px;
-      line-height: 1.7;
-    }
-
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 40px 0;
-      text-align: center;
-    }
-
-    footer .logo {
-      justify-content: center;
-      margin-bottom: 12px;
-    }
-
-    footer p {
-      color: var(--text-muted);
-      font-size: 13px;
-    }
-
-    footer .social-links {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-
-    footer .social-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 13px;
-      transition: color 0.2s;
-    }
-
-    footer .social-links a:hover {
-      color: var(--text-primary);
-    }
-
-    @media (max-width: 768px) {
-      .hero { padding: 60px 0 40px; }
-      .hero h1 { font-size: 32px; letter-spacing: -1px; }
-      .hero-subtitle { font-size: 18px; }
-      .hero p { font-size: 15px; }
+    @media (max-width: 720px) {
       .nav-links { display: none; }
-      .section-title { font-size: 28px; }
-      .features-grid { grid-template-columns: 1fr; }
-      .architecture { grid-template-columns: 1fr; }
+      .hero { padding: 64px 0 48px; }
+      .hero h1 { font-size: 46px; letter-spacing: -2px; }
+      .hero-subtitle { font-size: 19px; }
+      .hero-lede { font-size: 15px; }
+      .section { padding: 72px 0; }
+      .section-title { font-size: 30px; }
+      .bento { grid-template-columns: 1fr; }
+      .cell, .cell-wide, .cell-full { grid-column: 1 / -1; }
+      .lane { grid-template-columns: 1fr; gap: 16px; }
+      .tier { grid-template-columns: 1fr; gap: 8px; }
+      .tier-name { padding-top: 0; }
       .trust-grid { grid-template-columns: 1fr; }
       .steps { grid-template-columns: 1fr; }
+      .terminal { margin-top: 40px; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <nav>
-      <a href="/" class="logo">
-        <span class="logo-mark">T</span>
-        TDH Labs
-      </a>
-      <div class="nav-links">
-        <a href="/harbor/">Harbor</a>
-        <a href="/#products">Products</a>
-        <a href="/#manifesto">How It Works</a>
-      </div>
-    </nav>
+  <div class="nav-wrap">
+    <div class="container">
+      <nav>
+        <a href="/" class="logo"><span class="logo-mark">T</span> TDH Labs</a>
+        <div class="nav-links">
+          <a href="/harbor/">Harbor</a>
+          <a href="#features">Features</a>
+          <a href="#how">How it works</a>
+          <a href="https://github.com/TDH-Labs/Harbor" target="_blank">GitHub</a>
+        </div>
+      </nav>
+    </div>
   </div>
 
   <section class="hero">
@@ -556,97 +546,111 @@
       <div class="hero-badge">α Alpha · expect bugs</div>
       <h1>Harbor</h1>
       <p class="hero-subtitle">The environment your agents run in — not another agent to learn.</p>
-      <p>A self-hosted control plane that gives any AI agent persistent context, room-scoped tool access, and a full audit trail — entirely on your machine, with no vendor lock-in.</p>
+      <p class="hero-lede">A self-hosted control plane that gives any AI agent persistent context, room-scoped tool access, and a full audit trail — entirely on your machine, with no vendor lock-in.</p>
       <div class="hero-actions">
         <a href="https://github.com/TDH-Labs/Harbor" class="btn btn-primary" target="_blank">View on GitHub →</a>
-        <a href="#features" class="btn btn-outline">How it works ↓</a>
+        <a href="#how" class="btn btn-outline">How it works ↓</a>
+      </div>
+
+      <div class="terminal reveal">
+        <div class="terminal-bar">
+          <span class="terminal-dot" style="background:#ff5f57"></span>
+          <span class="terminal-dot" style="background:#febc2e"></span>
+          <span class="terminal-dot" style="background:#28c840"></span>
+          <span class="terminal-title">harbor — alpha</span>
+        </div>
+        <div class="terminal-body"><span class="p">$</span> npm i -g ./harbor-tugboat-0.1.0.tgz
+<span class="p">$</span> harbor init <span class="c">&amp;&amp;</span> harbor setup
+  <span class="ok">✓</span> environment ready · state in ~/.agent-env
+<span class="p">$</span> harbor install --for claude-code --write
+  <span class="ok">✓</span> added harbor → claude-code MCP config <span class="c">(backed up)</span>
+<span class="c"># skill loads now route through Harbor: gated, budgeted, audited</span></div>
       </div>
     </div>
   </section>
 
   <section id="features" class="section section-alt">
     <div class="container">
-      <div class="section-label">Why Harbor</div>
-      <h2 class="section-title">The agent environment,<br>not the agent.</h2>
-      <p class="section-desc">Every AI coding tool wants to own your workflow. Harbor inverts that — it's the environment your agents run inside, not another agent you have to learn. Bring your own models, your own tools, your own way of working.</p>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="icon icon-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
-          <h3>Agent-Neutral</h3>
-          <p>Works with Claude Code, Codex, OpenCode, Cursor, goose, or any MCP-compatible agent. Harbor doesn't care which agent you use — it provides the runtime, context, and tool wiring underneath.</p>
+      <div class="section-head reveal">
+        <div class="section-label">Why Harbor</div>
+        <h2 class="section-title">The agent environment,<br>not the agent.</h2>
+        <p class="section-desc">Every AI coding tool wants to own your workflow. Harbor inverts that — it's the environment your agents run inside, not another agent you have to learn. Bring your own models, your own tools, your own way of working.</p>
+      </div>
+
+      <div class="bento reveal">
+        <div class="cell cell-wide">
+          <div class="icon icon-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+          <h3>Progressive Skill Loading</h3>
+          <p>Agents don't bulk-load skills. Harbor serves a ~50-token index first, a ~3K digest when a skill looks relevant, and the full SKILL.md only when it's actually used — so a large skill pool costs almost nothing until something needs it.</p>
+          <div class="agent-chips">
+            <span>index ~50 tok</span><span>digest ~3K</span><span>full on demand</span>
+          </div>
         </div>
-        <div class="feature-card">
+        <div class="cell">
           <div class="icon icon-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="8" rx="2"/><rect x="2" y="13" width="20" height="8" rx="2"/><line x1="6" y1="7" x2="6.01" y2="7"/><line x1="6" y1="17" x2="6.01" y2="17"/></svg></div>
           <h3>Self-Hosted</h3>
-          <p>Everything runs on your machine or your infra. No telemetry, no cloud dependency, no vendor gatekeeping. Your prompts, context, and code never leave your network unless you route them out. <strong>Harbor is a cooperative control plane, not an OS sandbox</strong> — agents share your user permissions and filesystem.</p>
+          <p>Runs entirely on your machine — no telemetry, no cloud. All state lives in local SQLite (scheduler, sessions, budgets, audit) you can open and query yourself. <strong>A cooperative control plane, not an OS sandbox.</strong></p>
         </div>
-        <div class="feature-card">
-          <div class="icon icon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
-          <h3>Persistent Context</h3>
-          <p>Agents lose context between sessions. Harbor doesn't. Structured memory, project state, and cross-session continuity that survives model swaps, agent changes, and terminal restarts.</p>
+
+        <div class="cell">
+          <div class="icon icon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
+          <h3>Agent-Neutral</h3>
+          <p>Works with Claude Code, Codex, OpenCode, Cursor, goose — or any MCP-compatible agent. Harbor provides the runtime, context, and tool wiring underneath, so you switch agents without rebuilding your setup.</p>
         </div>
-        <div class="feature-card">
+        <div class="cell">
           <div class="icon icon-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
           <h3>Budget Enforcement</h3>
-          <p>Every session carries a token budget, checked and debited in-process on each skill load. Spending is tracked in real time and visible on the local dashboard — no agent quietly blows past its limit.</p>
+          <p>Every session carries a token budget, checked and debited in-process on each skill load. Tracked in real time on the local dashboard — no agent quietly blows past its limit.</p>
         </div>
-        <div class="feature-card">
-          <div class="icon icon-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
-          <h3>Workspace Management</h3>
-          <p>Each project gets a separate workspace with its own tools, models, and context store. Switch between projects without cross-contamination of context or config. Workspaces are organizationally separated by cooperative convention, not OS-level isolation — agents in different workspaces share your user account.</p>
-        </div>
-        <div class="feature-card">
+        <div class="cell">
           <div class="icon icon-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></div>
-          <h3>Pluggable Tool System</h3>
-          <p>Tools are just MCP servers or local scripts. Harbor discovers and wires them automatically. File system, web search, code execution, databases — add any tool your agents need without framework gymnastics.</p>
+          <h3>Pluggable Tools</h3>
+          <p>Tools are just MCP servers or local scripts. Harbor discovers and wires them — filesystem, web search, code execution — no framework gymnastics.</p>
+        </div>
+
+        <div class="cell cell-full">
+          <div class="icon icon-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg></div>
+          <h3>Self-Maintaining</h3>
+          <p>A file-watcher daemon keeps your agent context in sync: when a skill or room changes, Harbor regenerates the AGENTS.md / CLAUDE.md beacons and per-room skill indexes automatically — no manual step. Recurring upkeep runs through the SQLite-backed scheduler.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section id="how" class="section">
     <div class="container">
-      <div class="section-label">Architecture</div>
-      <h2 class="section-title">How it works</h2>
-      <p class="section-desc">Harbor sits between your agents and your infrastructure — providing context, managing tools, and persisting state across every session.</p>
+      <div class="section-head reveal">
+        <div class="section-label">How it works</div>
+        <h2 class="section-title">Every skill load<br>passes the gate.</h2>
+        <p class="section-desc">Harbor doesn't run your agent — it stands in front of the one thing that matters: what the agent can load. Every request is checked against the room, debited from the budget, and written to the audit trail before it returns.</p>
+      </div>
 
-      <div class="architecture">
-        <div class="arch-diagram">
-          <h3>Harbor Stack</h3>
-          <div class="arch-layer arch-layer-4">
-            <div class="layer-label">Layer 4</div>
-            <strong>Agent Interface</strong>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Claude · Codex · Cursor · goose · Custom</div>
+      <div class="howgrid reveal">
+        <div class="flow">
+          <div class="lane allow">
+            <div class="lane-req">read_skill(<span class="arg">"summarize"</span>)<small>session · room: research</small></div>
+            <div class="rail">
+              <div class="gate ok"><div class="gate-node">✓</div><div class="gate-label">Room gate</div><div class="gate-sub">in room</div></div>
+              <div class="gate ok"><div class="gate-node">✓</div><div class="gate-label">Budget</div><div class="gate-sub">1,623 / 100k</div></div>
+              <div class="gate ok"><div class="gate-node">✓</div><div class="gate-label">Audit</div><div class="gate-sub">allow logged</div></div>
+            </div>
+            <div class="lane-out ok">✓ loaded<small>1,623 tokens</small></div>
           </div>
-          <div class="arch-arrow">↑↓</div>
-          <div class="arch-layer arch-layer-3">
-            <div class="layer-label">Layer 3</div>
-            <strong>Harbor Core</strong>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Context Engine · Memory Store · Workspace Manager</div>
-          </div>
-          <div class="arch-arrow">↑↓</div>
-          <div class="arch-layer arch-layer-2">
-            <div class="layer-label">Layer 2</div>
-            <strong>Tool Runtime</strong>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">MCP · File System · Sandbox · Network</div>
-          </div>
-          <div class="arch-arrow">↑↓</div>
-          <div class="arch-layer arch-layer-1">
-            <div class="layer-label">Layer 1</div>
-            <strong>State Layer</strong>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">SQLite · scheduler · sessions · budgets · audit</div>
+          <div class="lane deny-lane">
+            <div class="lane-req">read_skill(<span class="arg">"deploy-prod"</span>)<small>session · room: research</small></div>
+            <div class="rail">
+              <div class="gate deny"><div class="gate-node">✗</div><div class="gate-label">Room gate</div><div class="gate-sub">not in room</div></div>
+              <div class="gate skip"><div class="gate-node">·</div><div class="gate-label">Budget</div><div class="gate-sub">skipped</div></div>
+              <div class="gate rec"><div class="gate-node">●</div><div class="gate-label">Audit</div><div class="gate-sub">deny logged</div></div>
+            </div>
+            <div class="lane-out deny">✗ denied<small>audited</small></div>
           </div>
         </div>
 
-        <div>
-          <h3 style="font-size:16px;font-weight:600;margin-bottom:20px;">Quick Start</h3>
+        <div class="how-code">
           <div class="code-block">
-            <div class="code-header">
-              <span>Set up Harbor</span>
-              <span>bash</span>
-            </div>
-            <div class="code-body">
-<span class="comment"># Requires Bun ≥ 1.1 · alpha — expect breakage</span>
+            <div class="code-header"><span>Set up Harbor</span><span>bash</span></div>
+            <div class="code-body"><span class="comment"># Requires Bun ≥ 1.1 · alpha — expect breakage</span>
 <span class="comment"># Install from the alpha tarball (npm release lands at beta)</span>
 <span class="keyword">npm</span> i -g ./harbor-tugboat-0.1.0.tgz
 
@@ -655,18 +659,13 @@
 <span class="keyword">harbor</span> setup    <span class="comment"># build the directory tree from config</span>
 <span class="keyword">harbor</span> check    <span class="comment"># verify everything is wired</span>
 
-<span class="comment"># Route an agent's skill access through Harbor</span>
-<span class="keyword">harbor</span> install --for claude-code
-            </div>
+<span class="comment"># Print an agent's MCP config (add --write to apply)</span>
+<span class="keyword">harbor</span> install --for claude-code</div>
           </div>
 
-          <div class="code-block" style="margin-top:16px;">
-            <div class="code-header">
-              <span>Config: config.toml</span>
-              <span>toml</span>
-            </div>
-            <div class="code-body">
-<span class="comment"># config.toml — rooms, skills, budgets</span>
+          <div class="code-block">
+            <div class="code-header"><span>config.toml</span><span>toml</span></div>
+            <div class="code-body"><span class="comment"># config.toml — rooms, skills, budgets</span>
 <span class="fn">[paths]</span>
 home = <span class="string">"~"</span>
 state_dir = <span class="string">"~/.agent-env"</span>
@@ -681,100 +680,104 @@ name = <span class="string">"filesystem"</span>
 command = <span class="string">"npx"</span>
 
 <span class="fn">[budgets]</span>
-default_session_limit = <span class="keyword">100000</span>
-            </div>
+default_session_limit = <span class="keyword">100000</span></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
+  <section class="section" style="border-top: 1px solid var(--border);">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-label">Progressive loading</div>
+        <h2 class="section-title">Read 50 tokens,<br>not the whole skill.</h2>
+        <p class="section-desc">Most setups paste every skill into the prompt up front. Harbor serves skills in tiers — agents read a tiny index first and expand only what they actually use, so a large skill pool stays nearly free until something needs it.</p>
+      </div>
+
+      <div class="ladder reveal">
+        <div class="tier">
+          <div class="tier-name">Index<small>~50 tokens</small></div>
+          <div>
+            <div class="tier-track"><div class="tier-fill t-index" style="width:16%">one line per skill</div></div>
+            <div class="tier-when">Always loaded — the agent knows every skill exists.</div>
+          </div>
+        </div>
+        <div class="tier">
+          <div class="tier-name">Digest<small>~3K tokens</small></div>
+          <div>
+            <div class="tier-track"><div class="tier-fill t-digest" style="width:46%">summary + when to use it</div></div>
+            <div class="tier-when">Loaded when a skill looks relevant to the task.</div>
+          </div>
+        </div>
+        <div class="tier">
+          <div class="tier-name">Full SKILL.md<small>complete file</small></div>
+          <div>
+            <div class="tier-track"><div class="tier-fill t-full" style="width:100%">full instructions + examples</div></div>
+            <div class="tier-when">Loaded only on demand — and that load is gated, budgeted, audited.</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="ladder-note">The full file is fetched through the same gate you saw above — <strong>progressive loading and access control are the same mechanism</strong>. You pay a skill's tokens only at the moment an agent actually opens it.</p>
+    </div>
+  </section>
+
   <section class="section section-alt">
     <div class="container">
-      <div class="section-label">Trust model</div>
-      <h2 class="section-title">A control plane, not a sandbox.</h2>
-      <p class="section-desc">Harbor governs how cooperating agents load skills, spend budget, and enter rooms — and records every decision. It is not a cage for a hostile process. Here is exactly where the line sits.</p>
-      <div class="trust-grid">
-        <div class="feature-card trust-card">
+      <div class="section-head reveal">
+        <div class="section-label">Trust model</div>
+        <h2 class="section-title">A control plane,<br>not a sandbox.</h2>
+        <p class="section-desc">Harbor governs how cooperating agents load skills, spend budget, and enter rooms — and records every decision. It is not a cage for a hostile process. Here is exactly where the line sits.</p>
+      </div>
+
+      <div class="trust-grid reveal">
+        <div class="trust-card">
           <div class="icon icon-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
           <h3>What Harbor enforces</h3>
-          <div class="trust-item">
-            <span class="trust-marker" style="color: var(--accent-green);">✓</span>
-            <div>
-              <div class="trust-item-label">Gated skill access</div>
-              <div class="trust-item-desc">Every skill load runs a room + budget + audit check.</div>
-            </div>
-          </div>
-          <div class="trust-item">
-            <span class="trust-marker" style="color: var(--accent-green);">✓</span>
-            <div>
-              <div class="trust-item-label">In-process budgets</div>
-              <div class="trust-item-desc">Token limits debit on the hot path — no quiet overspend.</div>
-            </div>
-          </div>
-          <div class="trust-item">
-            <span class="trust-marker" style="color: var(--accent-green);">✓</span>
-            <div>
-              <div class="trust-item-label">Full audit trail</div>
-              <div class="trust-item-desc">Every allow and deny logged with room, session, reason.</div>
-            </div>
-          </div>
+          <div class="trust-item"><span class="trust-marker" style="color: var(--accent-green);">✓</span><div><div class="trust-item-label">Gated skill access</div><div class="trust-item-desc">Every skill load runs a room + budget + audit check.</div></div></div>
+          <div class="trust-item"><span class="trust-marker" style="color: var(--accent-green);">✓</span><div><div class="trust-item-label">In-process budgets</div><div class="trust-item-desc">Token limits debit on the hot path — no quiet overspend.</div></div></div>
+          <div class="trust-item"><span class="trust-marker" style="color: var(--accent-green);">✓</span><div><div class="trust-item-label">Full audit trail</div><div class="trust-item-desc">Every allow and deny logged with room, session, reason.</div></div></div>
         </div>
-        <div class="feature-card trust-card">
+        <div class="trust-card">
           <div class="icon icon-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
           <h3>Where the boundary ends</h3>
-          <div class="trust-item">
-            <span class="trust-marker" style="color: var(--accent-orange);">—</span>
-            <div>
-              <div class="trust-item-label">Not an OS sandbox</div>
-              <div class="trust-item-desc">Raw file access can read a skill directly, skipping the gate.</div>
-            </div>
-          </div>
-          <div class="trust-item">
-            <span class="trust-marker" style="color: var(--accent-orange);">—</span>
-            <div>
-              <div class="trust-item-label">Rooms are cooperative</div>
-              <div class="trust-item-desc">The room comes from <code style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">AGENT_ENV_ROOM</code>; Harbor trusts it.</div>
-            </div>
-          </div>
-          <div class="trust-item">
-            <span class="trust-marker" style="color: var(--accent-orange);">—</span>
-            <div>
-              <div class="trust-item-label">Open by default</div>
-              <div class="trust-item-desc">A room with no skill list allows all; gating is opt-in.</div>
-            </div>
-          </div>
+          <div class="trust-item"><span class="trust-marker" style="color: var(--accent-orange);">—</span><div><div class="trust-item-label">Not an OS sandbox</div><div class="trust-item-desc">Raw file access can read a skill directly, skipping the gate.</div></div></div>
+          <div class="trust-item"><span class="trust-marker" style="color: var(--accent-orange);">—</span><div><div class="trust-item-label">Rooms are cooperative</div><div class="trust-item-desc">The room comes from <code>AGENT_ENV_ROOM</code>; Harbor trusts it.</div></div></div>
+          <div class="trust-item"><span class="trust-marker" style="color: var(--accent-orange);">—</span><div><div class="trust-item-label">Open by default</div><div class="trust-item-desc">A room with no skill list allows all; gating is opt-in.</div></div></div>
         </div>
+        <div class="trust-note">Harbor makes the cooperative path the easy, observable, budgeted one. It does not claim to be unbypassable OS-level isolation — that is a separate layer, on the roadmap, not in <code>0.1</code>.</div>
       </div>
-      <div class="trust-note">Harbor makes the cooperative path the easy, observable, budgeted one. It does not claim to be unbypassable OS-level isolation — that is a separate layer, on the roadmap, not in <code>0.1</code>.</div>
     </div>
   </section>
 
-  <section class="section section-alt">
+  <section class="section">
     <div class="container">
-      <div class="section-label">Get Started</div>
-      <h2 class="section-title">From zero to running in minutes</h2>
-      <p class="section-desc">No accounts to create. No SaaS to sign up for. Just install, configure, and go.</p>
-      <div class="steps">
+      <div class="section-head reveal">
+        <div class="section-label">Get started</div>
+        <h2 class="section-title">From zero to running<br>in minutes.</h2>
+        <p class="section-desc">No accounts to create. No SaaS to sign up for. Just install, configure, and go.</p>
+      </div>
+      <div class="steps reveal">
         <div class="step">
-          <span class="step-number">01</span>
-          <h4>Install</h4>
-          <p>Alpha ships as a tarball — <code style="background:var(--bg-elevated);padding:2px 8px;border-radius:4px;font-size:13px;">npm i -g ./harbor-tugboat-0.1.0.tgz</code>. Needs Bun ≥ 1.1. No Docker, no cloud, no account.</p>
+          <span class="step-number">01 — Install</span>
+          <h4>Grab the tarball</h4>
+          <p>Alpha ships as a tarball — <code>npm i -g ./harbor-tugboat-0.1.0.tgz</code>. Needs Bun ≥ 1.1. No Docker, no cloud, no account.</p>
         </div>
         <div class="step">
-          <span class="step-number">02</span>
-          <h4>Configure</h4>
-          <p>One TOML file — <code style="background:var(--bg-elevated);padding:2px 8px;border-radius:4px;font-size:13px;">config.toml</code> — defines your rooms, the skills and MCP servers each can reach, and per-session budgets.</p>
+          <span class="step-number">02 — Configure</span>
+          <h4>One TOML file</h4>
+          <p><code>config.toml</code> defines your rooms, the skills and MCP servers each can reach, and per-session budgets.</p>
         </div>
         <div class="step">
-          <span class="step-number">03</span>
-          <h4>Connect an Agent</h4>
+          <span class="step-number">03 — Connect</span>
+          <h4>Wire an agent</h4>
           <p>Harbor exposes an MCP server and a CLI. Connect Claude Code, Codex, Cursor, goose, or any MCP-native agent. No adapter needed.</p>
         </div>
         <div class="step">
-          <span class="step-number">04</span>
-          <h4>Ship</h4>
-          <p>Your agent gets persistent context, gated tool access, in-process budgets, and a full audit trail — out of the box. Focus on building.</p>
+          <span class="step-number">04 — Ship</span>
+          <h4>Build</h4>
+          <p>Your agent gets persistent context, gated tool access, in-process budgets, and a full audit trail — out of the box.</p>
         </div>
       </div>
     </div>
@@ -782,28 +785,38 @@ default_session_limit = <span class="keyword">100000</span>
 
   <section class="cta-section">
     <div class="container">
-      <h2>Built by AI. For AI.</h2>
-      <p>Harbor was designed, coded, and shipped by AI agents — the same kind it's designed to manage. It's a dogfood product in the truest sense.</p>
-      <div class="hero-actions">
-        <a href="https://github.com/TDH-Labs/Harbor" class="btn btn-primary" target="_blank">Star on GitHub →</a>
-        <a href="/" class="btn btn-outline">← Back to TDH Labs</a>
+      <div class="cta-inner reveal">
+        <h2>Built by AI. For AI.</h2>
+        <p>Harbor was designed, coded, and shipped by AI agents — the same kind it's designed to manage. A dogfood product in the truest sense.</p>
+        <div class="hero-actions">
+          <a href="https://github.com/TDH-Labs/Harbor" class="btn btn-primary" target="_blank">Star on GitHub →</a>
+          <a href="/" class="btn btn-outline">← Back to TDH Labs</a>
+        </div>
       </div>
     </div>
   </section>
 
   <footer>
     <div class="container">
-      <a href="/" class="logo">
-        <span class="logo-mark">T</span>
-        TDH Labs
-      </a>
-      <div class="social-links">
-        <a href="https://github.com/TDH-Labs" target="_blank">GitHub</a>
-        <a href="/harbor/">Harbor</a>
-        <a href="/#manifesto">How It Works</a>
+      <div class="footer-inner">
+        <a href="/" class="logo"><span class="logo-mark">T</span> TDH Labs</a>
+        <div class="footer-links">
+          <a href="https://github.com/TDH-Labs" target="_blank">GitHub</a>
+          <a href="/harbor/">Harbor</a>
+          <a href="#how">How it works</a>
+        </div>
+        <span class="footer-copy">© 2026 TDH Labs · shipped by AI agents</span>
       </div>
-      <p>© 2026 TDH Labs. Designed, coded, and shipped by AI agents.</p>
     </div>
   </footer>
+
+  <script>
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      }
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  </script>
 </body>
 </html>
