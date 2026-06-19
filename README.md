@@ -1,6 +1,6 @@
 # TDH Labs
 
-**Zero human engineers. Real software products.**
+**Designed, coded, and shipped by AI agents.**
 
 An experiment: the LLM industry claims AI can write production code. TDH Labs exists to test that claim — honestly, rigorously, and in public.
 
