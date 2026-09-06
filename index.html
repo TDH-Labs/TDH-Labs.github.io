@@ -436,28 +436,47 @@
       <h2 class="section-title">Shipped by AI</h2>
       <p class="section-desc">Every product on this page was built without a single human engineer or designer. The entire technical stack — architecture, code, UI, deployment — is generated, reviewed, and operated by AI agents across frontier and open-weight models.</p>
       <div class="products-grid">
-        <div class="product-card" onclick="window.location='/harbor/'" style="cursor:pointer;">
-          <div class="icon icon-purple">🧠</div>
-          <h3>Harbor</h3>
-          <p>A local agent-neutral control plane. Self-hosted AI agent environment that manages context across models, tools, and workspaces — without vendor lock-in.</p>
-          <a href="/harbor/" style="font-size:13px;color:var(--accent);text-decoration:none;display:inline-block;margin-bottom:12px;">Learn more →</a>
+        <!-- 1. VibeHard (Flagship) -->
+        <div class="product-card" onclick="window.location='https://vibehard.ai'" style="cursor:pointer;">
+          <div class="icon icon-purple">⚡</div>
+          <h3>VibeHard</h3>
+          <p>The autonomous business workflow engine and production-grade software compiler. Generates enterprise applications under 16 deterministic inspection gates (AST, Gitleaks, Supabase RLS, PGlite migrations, Trivy CVEs) with HMAC-signed deploy sentinels.</p>
+          <a href="https://vibehard.ai" target="_blank" rel="noopener noreferrer" style="font-size:13px;color:var(--accent);text-decoration:none;display:inline-block;margin-bottom:12px;">Visit Vibehard.ai →</a>
           <br>
-          <span class="status-badge status-alpha">α Alpha — Public Preview</span>
-          <div class="tech-stack">Built in Claude and Pi</div>
+          <span class="status-badge status-live">● Live Production Engine</span>
+          <div class="tech-stack">TypeScript · Docker · Fly.io · Supabase · Claude · Gemini 3.8 Flash</div>
         </div>
-        <div class="product-card">
-          <div class="icon icon-green">🔒</div>
-          <h3>Ratatoskr</h3>
-          <p>An IPv6 VPN built on Yggdrasil mesh networking. Pure peer-to-peer — no centralized handshakes, no coordination server, no single point of control. Each node connects directly into the mesh.</p>
-          <span class="status-badge status-soon">Future Product</span>
-          <div class="tech-stack">Built in Claude and Pi</div>
+
+        <!-- 2. VibeForge (Flagship) -->
+        <div class="product-card" onclick="window.location='https://forge.vibehard.ai'" style="cursor:pointer;">
+          <div class="icon icon-green">🔨</div>
+          <h3>VibeForge</h3>
+          <p>Sovereign AI application builder enclave and live code forge. Turns natural language specifications into verified full-stack applications with air-gapped security, zero vendor lock-in, and rapid revenue deployment.</p>
+          <a href="https://forge.vibehard.ai" target="_blank" rel="noopener noreferrer" style="font-size:13px;color:var(--accent-green);text-decoration:none;display:inline-block;margin-bottom:12px;">Launch Forge Studio →</a>
+          <br>
+          <span class="status-badge status-live">● Live Production Enclave</span>
+          <div class="tech-stack">Astro · Tailwind · n8n Enclave · Docker Socket Proxy</div>
         </div>
+
+        <!-- 3. Harbor (Control Plane) -->
+        <div class="product-card" onclick="window.location='/harbor/'" style="cursor:pointer;">
+          <div class="icon icon-blue">🧠</div>
+          <h3>Harbor</h3>
+          <p>A neutral self-hosted AI agent control plane. Eliminates context bloat and token waste through room capability isolation, token budget governors (harbor budget), and flat O(1) context scaling across 120+ modular skills.</p>
+          <a href="/harbor/" style="font-size:13px;color:var(--accent-blue);text-decoration:none;display:inline-block;margin-bottom:12px;">Learn more →</a>
+          <br>
+          <span class="status-badge status-alpha">v0.1.1 — Active Control Plane</span>
+          <div class="tech-stack">Rust / Bun · MCP Router · Multi-Agent Beacons</div>
+        </div>
+
+        <!-- 4. Freedom Tech & Open Protocols -->
         <div class="product-card">
-          <div class="icon icon-blue">🔮</div>
-          <h3>Next Up</h3>
-          <p>A domain expert identified the need. The AI team is scoping feasibility. If viable, it ships — no humans in the loop.</p>
-          <span class="status-badge status-soon">Research</span>
-          <div class="tech-stack">Built in Claude and Pi</div>
+          <div class="icon icon-green">🌐</div>
+          <h3>Buzz &amp; Loch</h3>
+          <p>Sovereign communication and decentralized protocol engineering. Buzz powers multi-agent hive-mind simulations; Loch delivers an AI-integrated native client for the decentralized Nostr protocol.</p>
+          <br>
+          <span class="status-badge status-soon">Open Protocol Labs</span>
+          <div class="tech-stack">Nostr (NIP-01) · WebSockets · Decentralized Relays</div>
         </div>
       </div>
     </div>
