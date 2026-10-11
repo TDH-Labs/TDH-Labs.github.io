@@ -1,0 +1,15 @@
+# Project Hints: TDH Labs
+
+## Overview
+Research and development lab for agent infrastructure experiments.
+
+## Structure
+- `harbor/` — Harbor-related experiments
+- `README.md` — Lab documentation
+- `LICENSE` — License file
+- `CNAME` — DNS/domain configuration
+- `AGENTS.md` — Agent instructions
+
+## Workflows
+- Experiment with new agent capabilities
+- Test Harbor integrations and MCP servers

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A business builder for my Muse — TDH Labs</title>
+  <meta name="description" content="My Muse will become a superagent, a thought partner for business ideas, and automate the bits while I take care of the atoms.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg-card: #101017;
+      --bg-elevated: #16161f;
+      --bg-code: #0c0c12;
+      --border: #1f1f2b;
+      --border-strong: #2b2b3a;
+      --text-primary: #ededf3;
+      --text-secondary: #9292a6;
+      --text-muted: #5a5a72;
+      --accent: #7c6cf0;
+      --accent-glow: rgba(124, 108, 240, 0.15);
+      --accent-green: #00d2a0;
+      --accent-blue: #4a9eff;
+      --accent-orange: #ffa500;
+      --radius: 14px;
+      --radius-lg: 18px;
+      --maxw: 1120px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 52px 52px;
+      -webkit-mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 0%, transparent 75%);
+      mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 0%, transparent 75%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    a { color: inherit; }
+
+    /* Nav */
+    .nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(10, 10, 15, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-green));
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #5a4bd1);
+      color: #fff;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px var(--accent-glow);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: var(--bg-elevated);
+      border-color: var(--text-muted);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 90px 0 60px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid rgba(124, 108, 240, 0.25);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: 58px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.15;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-hook {
+      font-size: 22px;
+      color: var(--text-primary);
+      max-width: 820px;
+      margin: 0 auto 20px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .hero-subhook {
+      font-size: 17px;
+      color: var(--text-secondary);
+      max-width: 720px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    /* Highlight Banner */
+    .feature-banner {
+      background: linear-gradient(180deg, rgba(124, 108, 240, 0.08) 0%, rgba(16, 16, 23, 0.6) 100%);
+      border: 1px solid rgba(124, 108, 240, 0.25);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      max-width: 860px;
+      margin: 0 auto 80px;
+      text-align: left;
+    }
+
+    .feature-banner h3 {
+      font-size: 20px;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feature-banner p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* Grid Sections */
+    .section {
+      padding: 70px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 680px;
+      margin-bottom: 48px;
+      line-height: 1.7;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      transition: all 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-2px);
+    }
+
+    .card-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    .card h4 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* Trial Breakdown Box */
+    .trial-box {
+      background: var(--bg-card);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      margin-top: 20px;
+      box-shadow: 0 8px 32px rgba(124, 108, 240, 0.1);
+    }
+
+    .trial-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 24px;
+    }
+
+    .trial-col {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .trial-col h5 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .trial-col ul {
+      list-style: none;
+    }
+
+    .trial-col li {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      line-height: 1.6;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .badge-check { color: var(--accent-green); font-weight: bold; }
+    .badge-shield { color: var(--accent-blue); font-weight: bold; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 38px; }
+      .hero-hook { font-size: 18px; }
+      .trial-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-wrap">
+    <div class="container">
+      <nav>
+        <a href="/" class="logo">
+          <span class="logo-mark">T</span>
+          TDH Labs
+        </a>
+        <div class="nav-links">
+          <a href="/muse/">Muse</a>
+          <a href="/vibehard/">VibeHard</a>
+          <a href="/harbor/">Harbor</a>
+          <a href="/legal/">Legal</a>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badge">🎙️ Ray-Bans · WhatsApp · Autonomous Execution</div>
+        <h1>A business builder for my Muse.</h1>
+        <p class="hero-hook">My Muse will become a superagent, a thought partner for business ideas, and automate the bits while I take care of the atoms.</p>
+        <p class="hero-subhook">
+          <strong>My Muse now codes.</strong> You don't need a technical co-founder, an engineering firm, or a keyboard. Speak your business intent while on-site or driving. Muse captures the vision and commands Skidnir's private Zero-Knowledge Enclave to architect, code, test, and deploy production software.
+        </p>
+        <div class="hero-actions">
+          <a href="#trial" class="btn btn-primary">Start 5-Day Free Trial →</a>
+          <a href="#architecture" class="btn btn-outline">How Muse Talks to Skidnir</a>
+        </div>
+
+        <div class="feature-banner">
+          <h3>⚡ The Atoms &amp; Bits Paradigm</h3>
+          <p>
+            You run a real physical business: taking care of patients, inspecting construction sites, managing properties, or closing clients in the real world (the <strong>atoms</strong>). You shouldn't be trapped in front of a laptop wrestling with webhooks, database migrations, or billing APIs (the <strong>bits</strong>). Muse handles conversational strategy; Skidnir executes the heavy engineering autonomously.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="architecture" class="section">
+      <div class="container">
+        <div class="section-label">Architecture</div>
+        <h2 class="section-title">Inversion of Control: How Muse Directs Skidnir</h2>
+        <p class="section-desc">
+          Muse runs in closed cloud environments (like Meta Ray-Bans and WhatsApp) without local computer control or direct MCP access. We solved this with Inversion of Control.
+        </p>
+
+        <div class="cards-grid">
+          <div class="card">
+            <span class="card-icon">👓</span>
+            <h4>1. Conversational Intent</h4>
+            <p>You speak naturally to your glasses or drop an audio memo in WhatsApp: <em>"Muse, create a fast intake form for emergency dental triage that calculates insurance co-pays and pings on-call staff."</em></p>
+          </div>
+          <div class="card">
+            <span class="card-icon">⚡</span>
+            <h4>2. Asynchronous Webhook ACK</h4>
+            <p>Skidnir acknowledges receipt in under 800ms to keep your voice session alive, then initiates internal architecture synthesis inside its Zero-Knowledge Enclave without blocking your conversation.</p>
+          </div>
+          <div class="card">
+            <span class="card-icon">🛡️</span>
+            <h4>3. Autonomous Staff Execution</h4>
+            <p>Skidnir functions as the MCP Host and General Contractor. Internal frontier models (Claude 3.5 Sonnet / Gemini Pro) run VibeHard compiler tools, generate schemas, and verify against 31 automated quality gates.</p>
+          </div>
+          <div class="card">
+            <span class="card-icon">📲</span>
+            <h4>4. Interactive 1-Tap Checkpoints</h4>
+            <p>Instead of 5-page questionnaires, Skidnir sends clean WhatsApp interactive buttons: <code>[Approve Architecture]</code> or <code>[Tweak Settings]</code>. You stay in control with zero friction.</p>
+          </div>
+          <div class="card">
+            <span class="card-icon">🚀</span>
+            <h4>5. Live Containerized Deploy</h4>
+            <p>Upon your single tap, your production application is compiled, HMAC-signed, and deployed to your sovereign cloud domain. The entire software lifecycle executed while you focused on clients.</p>
+          </div>
+          <div class="card">
+            <span class="card-icon">🔒</span>
+            <h4>6. Apple PCC Zero-Knowledge Enclave</h4>
+            <p>Your business logic and sensitive customer data run in RAM-only ephemeral enclaves. Client records are protected by AES-256 envelope encryption and strict kernel egress firewalls.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="trial" class="section">
+      <div class="container">
+        <div class="section-label">Trial Policy</div>
+        <h2 class="section-title">5-Day Free Trial: Real Superpowers, Zero Toys</h2>
+        <p class="section-desc">
+          We don't believe in fake sandboxes or toy demos. You get 100% real, production tools from minute one.
+        </p>
+
+        <div class="trial-box">
+          <h3 style="font-size: 22px; margin-bottom: 8px;">The Real Tools Policy</h3>
+          <p style="color: var(--text-secondary); font-size: 15px;">Here is exactly what is live during your 5-day trial, and how federal postal regulations protect your physical address:</p>
+
+          <div class="trial-grid">
+            <div class="trial-col">
+              <h5><span class="badge-check">✓</span> 100% Live During 5-Day Trial</h5>
+              <ul>
+                <li><span class="badge-check">✓</span> <strong>Full VibeHard Compiler:</strong> Synthesize real, production-ready codebases and schemas.</li>
+                <li><span class="badge-check">✓</span> <strong>Live WhatsApp Bridge:</strong> Connect Muse voice notes directly to Skidnir's orchestration staff.</li>
+                <li><span class="badge-check">✓</span> <strong>Real Container Deployments:</strong> Test live apps and webhooks on your custom domains.</li>
+                <li><span class="badge-check">✓</span> <strong>Live Stripe Billing Engine:</strong> Generate real checkout links and ACH debit flows.</li>
+                <li><span class="badge-check">✓</span> <strong>Live AP/AR OCR Document Intake:</strong> Upload your actual vendor invoices and receipts for automated GL reconciliation.</li>
+              </ul>
+            </div>
+
+            <div class="trial-col">
+              <h5><span class="badge-shield">🛡️</span> Federal CMRA Postal Mailbox Allocation</h5>
+              <ul>
+                <li><span class="badge-shield">●</span> <strong>Federal Compliance Law:</strong> By US Federal Law (USPS DMM 508.1.8 / Title 39 CFR), legal custody of physical paper mail requires a notarized Form 1583 and two verified photo IDs.</li>
+                <li><span class="badge-shield">●</span> <strong>We Cover Notarization:</strong> TDH Labs pays the full $25 federal notary fee the moment you activate your permanent paid plan.</li>
+                <li><span class="badge-shield">●</span> <strong>Full Digital Testing:</strong> During the trial, you test 100% of the mailroom automation by uploading scans and PDFs of your real mail into WhatsApp. Your physical commercial street address is assigned the moment you graduate.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 TDH AI Labs (Adam Matar Sole Proprietorship). All rights reserved.</p>
+      <p style="margin-top: 8px;"><a href="/legal/msa.html">Master Services Agreement</a> · <a href="/legal/privacy.html">Privacy Shield</a></p>
+    </div>
+  </footer>
+</body>
+</html>

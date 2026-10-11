@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A software factory for my agent — VibeHard | TDH Labs</title>
+  <meta name="description" content="My agent specs and designs software architecture, writes scalable code, and goes through the same kinds of testing and quality control software companies use.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg-card: #101017;
+      --bg-elevated: #16161f;
+      --bg-code: #0b0b10;
+      --border: #1f1f2b;
+      --border-strong: #2b2b3a;
+      --text-primary: #ededf3;
+      --text-secondary: #9292a6;
+      --text-muted: #5a5a72;
+      --accent: #7c6cf0;
+      --accent-glow: rgba(124, 108, 240, 0.15);
+      --accent-green: #00d2a0;
+      --accent-blue: #4a9eff;
+      --accent-orange: #ffa500;
+      --radius: 14px;
+      --radius-lg: 18px;
+      --maxw: 1120px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 48px 48px;
+      -webkit-mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 0%, transparent 75%);
+      mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 0%, transparent 75%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    a { color: inherit; }
+
+    .nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(10, 10, 15, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-green));
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #5a4bd1);
+      color: #fff;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px var(--accent-glow);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: var(--bg-elevated);
+      border-color: var(--text-muted);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 90px 0 60px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid rgba(124, 108, 240, 0.25);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.15;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-green) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-hook {
+      font-size: 21px;
+      color: var(--text-primary);
+      max-width: 860px;
+      margin: 0 auto 20px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .hero-subhook {
+      font-size: 17px;
+      color: var(--text-secondary);
+      max-width: 760px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    /* Terminal Window */
+    .terminal-card {
+      background: var(--bg-code);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      padding: 24px;
+      max-width: 820px;
+      margin: 0 auto 60px;
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--text-secondary);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+    }
+
+    .terminal-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .term-prompt { color: var(--accent-green); font-weight: 600; }
+    .term-cmd { color: #fff; }
+    .term-out { color: var(--text-muted); }
+    .term-success { color: var(--accent-green); }
+
+    /* Sections */
+    .section {
+      padding: 70px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent-green);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 680px;
+      margin-bottom: 48px;
+      line-height: 1.7;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .pipeline-step {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .step-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--accent-green);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .pipeline-step h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .pipeline-step p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Trial Policy */
+    .trial-box {
+      background: var(--bg-card);
+      border: 1px solid var(--accent-green);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      margin-top: 24px;
+    }
+
+    .trial-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-top: 20px;
+    }
+
+    .trial-col {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .trial-col h5 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .trial-col ul {
+      list-style: none;
+    }
+
+    .trial-col li {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      line-height: 1.6;
+      display: flex;
+      gap: 8px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 38px; }
+      .trial-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-wrap">
+    <div class="container">
+      <nav>
+        <a href="/" class="logo">
+          <span class="logo-mark">V</span>
+          VibeHard
+        </a>
+        <div class="nav-links">
+          <a href="/muse/">Muse</a>
+          <a href="/vibehard/">VibeHard</a>
+          <a href="/harbor/">Harbor</a>
+          <a href="/legal/">Legal</a>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badge">⚡ Enterprise MCP · 31 Security Gates · SRE Compliant</div>
+        <h1>A software factory for my agent.</h1>
+        <p class="hero-hook">My agent specs and designs software architecture, writes scalable code, and goes through the same kinds of testing and quality control software companies use.</p>
+        <p class="hero-subhook">
+          <strong>My Muse now codes.</strong> Connect your Claude, Cursor, Antigravity, or Muse agents to VibeHard via the Model Context Protocol (MCP). Stop generating fragile toy prototypes with unvetted dependencies. Compile sovereign, audited, enterprise-grade backends with zero human engineers.
+        </p>
+        <div class="hero-actions">
+          <a href="#trial" class="btn btn-primary">Start 5-Day Free Trial →</a>
+          <a href="#pipeline" class="btn btn-outline">Explore the 31 Gates</a>
+        </div>
+
+        <div class="terminal-card">
+          <div class="terminal-bar">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="font-size: 11px; color: var(--text-muted); margin-left: 8px;">mcp://vibehard-server</span>
+          </div>
+          <div><span class="term-prompt">$</span> <span class="term-cmd">call_mcp_tool "vibehard_build" --prompt "AP automated reconciliation pod"</span></div>
+          <div class="term-out">[1/5] Spec Compiler: Synthesized PRD + SRS + System Architecture Document (SAD)</div>
+          <div class="term-out">[2/5] AST Linter: 0 syntax errors, 100% SRE laws verified</div>
+          <div class="term-out">[3/5] State Machine: Injected SAGA compensation rollbacks &amp; idempotency keys</div>
+          <div class="term-out">[4/5] Security Crucible: 31 Automated security gates passed (Apple PCC RAM-enclave)</div>
+          <div class="term-success">✓ Synthesized production-ready container DAG with HMAC deploy sentinel [0.84s]</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pipeline" class="section">
+      <div class="container">
+        <div class="section-label">Pipeline</div>
+        <h2 class="section-title">The Sovereign Factory Pipeline</h2>
+        <p class="section-desc">
+          How VibeHard transforms high-level prompts into verified production software with institutional rigor.
+        </p>
+
+        <div class="grid-4">
+          <div class="pipeline-step">
+            <div class="step-num">PHASE 01</div>
+            <h4>Formal Specification</h4>
+            <p>Converts ambiguous prompts into exhaustive PRDs, Software Requirement Specs (SRS), and Software Architecture Documents (SAD).</p>
+          </div>
+          <div class="pipeline-step">
+            <div class="step-num">PHASE 02</div>
+            <h4>Deterministic DAGs</h4>
+            <p>Replaces expensive LLM loops with microsecond code execution graphs, delivering 70–90% token reduction and zero math errors.</p>
+          </div>
+          <div class="pipeline-step">
+            <div class="step-num">PHASE 03</div>
+            <h4>31 Security Gates</h4>
+            <p>Automated AST verification, RLS leak detection, injection shields, and SAGA compensation dead-letter states before deployment.</p>
+          </div>
+          <div class="pipeline-step">
+            <div class="step-num">PHASE 04</div>
+            <h4>Blind SRE Enclave</h4>
+            <p>Deploys to RAM-only memory containers (Apple PCC standard). Customer PII and financial records remain strictly zero-knowledge.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="trial" class="section">
+      <div class="container">
+        <div class="section-label">Trial Policy</div>
+        <h2 class="section-title">5-Day Free Trial Policy: Real Tools vs. CMRA Regulations</h2>
+        <p class="section-desc">
+          You receive complete access to the live production compiler, live MCP toolchain, and live deployment engines.
+        </p>
+
+        <div class="trial-box">
+          <h3 style="font-size: 20px; margin-bottom: 8px;">Uncompromised Superpowers</h3>
+          <p style="color: var(--text-secondary); font-size: 14px;">Real tools for 5 days. Here is our regulatory breakdown regarding physical postal infrastructure:</p>
+
+          <div class="trial-grid">
+            <div class="trial-col">
+              <h5><span style="color: var(--accent-green);">✓</span> 100% Unlocked for 5 Days</h5>
+              <ul>
+                <li><span style="color: var(--accent-green);">✓</span> <strong>VibeHard MCP Server:</strong> Connect directly to Claude Code, Cursor, or Skidnir.</li>
+                <li><span style="color: var(--accent-green);">✓</span> <strong>Full AST Verification:</strong> Run the 31-gate crucible on your custom DAGs.</li>
+                <li><span style="color: var(--accent-green);">✓</span> <strong>Real Container Deployments:</strong> Build and test isolated Docker microservices.</li>
+                <li><span style="color: var(--accent-green);">✓</span> <strong>Live AP/AR Invoice OCR:</strong> Test real document parsing with zero mocked responses.</li>
+              </ul>
+            </div>
+
+            <div class="trial-col">
+              <h5><span style="color: var(--accent-blue);">🛡️</span> Physical USPS CMRA Postal Compliance</h5>
+              <ul>
+                <li><span style="color: var(--accent-blue);">●</span> <strong>Federal Mail Law:</strong> Physical commercial street address assignment requires USPS Form 1583 notarization (39 CFR § 508.1.8).</li>
+                <li><span style="color: var(--accent-blue);">●</span> <strong>Zero Trial Lockout:</strong> You test the complete OCR mailroom pipeline immediately with uploaded PDFs and scans.</li>
+                <li><span style="color: var(--accent-blue);">●</span> <strong>Notary Fee Paid by TDH:</strong> We cover the $25 federal notary token upon paid subscription activation.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 TDH AI Labs (Adam Matar Sole Proprietorship). All rights reserved.</p>
+      <p style="margin-top: 8px;"><a href="/legal/msa.html">Master Services Agreement</a> · <a href="/legal/privacy.html">Privacy Shield</a></p>
+    </div>
+  </footer>
+</body>
+</html>
